@@ -1,0 +1,63 @@
+---
+// Standardize the captions and delay based on your uniform animation rules
+const categories = [
+    {
+        title: "Custom Hybrid Booths",
+        img: "https://images.unsplash.com/photo-1565034946487-077786996e27?q=80&w=1000&auto=format&fit=crop",
+        delay: "1"
+    },
+    {
+        title: "Modular Booths",
+        img: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=1000&auto=format&fit=crop",
+        delay: "2"
+    },
+    {
+        title: "Rental Options",
+        img: "https://images.unsplash.com/photo-1475721027785-f74dea9f2672?q=80&w=1000&auto=format&fit=crop",
+        delay: "3"
+    }
+];
+---
+
+<section class="py-10 bg-dark overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Standardized Grid following the reference image layout -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {categories.map((item) => (
+                <div 
+                    class="group flex flex-col items-center space-y-6" 
+                    data-reveal 
+                    data-delay={item.delay}
+                >
+                    <!-- Image Container: Matching the 2rem rounded corners from image_d556b5.jpg -->
+                    <div class="w-full aspect-[4/3] rounded-[2rem] overflow-hidden shadow-2xl transition-all duration-500 group-hover:shadow-primary/20">
+                        <img 
+                            src={item.img} 
+                            alt={item.title}
+                            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                            loading="lazy"
+                        />
+                    </div>
+
+                    <!-- Label: Using your Primary Orange color for visibility on Dark background -->
+                    <h3 class="text-primary text-center text-lg md:text-xl font-black tracking-wide uppercase">
+                        {item.title}
+                    </h3>
+                </div>
+            ))}
+        </div>
+    </div>
+</section>
+
+<style>
+    /* Section specific grounding */
+    section {
+        font-family: var(--font-sans);
+    }
+
+    /* Standardizing the shadow depth for that premium look */
+    .shadow-2xl {
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+</style>

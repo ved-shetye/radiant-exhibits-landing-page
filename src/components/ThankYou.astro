@@ -1,0 +1,115 @@
+---
+const GoogleCalenderUrl = import.meta.env.PUBLIC_GOOGLE_CALENDER_URL;
+---
+
+<section class="bg-surface py-20 min-h-screen flex items-center justify-center font-sans">
+  <div class="max-w-7xl mx-auto px-6 text-center">
+
+    <!-- Thank You Message -->
+    <div data-reveal data-delay="1" class="mb-12">
+      <h1 class="text-2xl md:text-3xl font-black text-secondary leading-tight mb-4">
+        Thank You for Contacting Us!
+      </h1>
+      <p class="text-xl text-text font-medium">
+        Our team will be in touch with you shortly with respect to your requirement.
+      </p>
+    </div>
+
+    <!-- Consultation Card -->
+    <div
+      data-reveal
+      data-delay="2"
+      class="bg-white rounded-[32px] p-12 md:p-24 shadow-xl border border-gray-100"
+    >
+      <h2 class="text-2xl md:text-[32px] font-extrabold text-dark mb-4 leading-snug max-w-4xl mx-auto">
+        Schedule a <span class="text-primary uppercase">FREE</span> Booth Strategy Online Consultation with our Trade Show Experts
+      </h2>
+
+      <p class="text-gray-600 text-lg mb-10 max-w-2xl mx-auto">
+        Increase Brand Visibility and Interaction with our Standout Custom Booths
+      </p>
+
+      <!-- Included Items -->
+      <div class="max-w-2xl mx-auto mb-12 bg-slate-50 p-8 rounded-2xl border border-slate-100">
+        <h3 class="text-lg font-black text-dark uppercase tracking-wide mb-6 text-left border-b border-primary/20 pb-2">
+          What is included in the consultation?
+        </h3>
+
+        <div class="grid md:grid-cols-2 gap-y-4 gap-x-8 text-left">
+          {[
+            "Booth Life-Cycle Planning",
+            "Booth Design Goals",
+            "Cost and Quote Breakdown",
+            "Brand Goals & Guidelines",
+            "Rentals & Other Requirements"
+          ].map((item) => (
+            <div class="flex items-center gap-3 group">
+              <div class="w-2 h-2 rounded-full bg-primary flex-shrink-0 group-hover:scale-125 transition-transform"></div>
+              <span class="font-bold text-dark italic group-hover:text-secondary transition-colors">{item}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Button -->
+      <div class="space-y-6">
+        <a
+          href="#booking-calendar"
+          id="scrollBtn"
+          class="bg-primary text-white text-xl px-12 py-4 rounded-2xl font-black transition-all shadow-xl shadow-primary/20 hover:scale-105 active:scale-95 inline-block"
+        >
+          Book Free Consultation Today!
+        </a>
+      </div>
+    </div>
+
+    <!-- Calendar Section -->
+    <div
+      id="booking-calendar"
+      data-reveal
+      data-delay="3"
+      class="mt-12 bg-white rounded-2xl shadow-xl overflow-hidden max-w-5xl mx-auto border border-gray-200 scroll-mt-28"
+    >
+      <iframe
+        src={GoogleCalenderUrl}
+        width="100%"
+        height="700"
+        frameborder="0"
+        class="w-full"
+        loading="lazy"
+      ></iframe>
+    </div>
+
+  </div>
+</section>
+
+<script>
+  const btn = document.getElementById("scrollBtn");
+
+  btn?.addEventListener("click", function (e) {
+    e.preventDefault();
+
+    const target = document.getElementById("booking-calendar");
+
+    if (target) {
+      target.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    }
+  });
+</script>
+
+<style>
+  html {
+    scroll-behavior: smooth;
+  }
+
+  #booking-calendar {
+    scroll-margin-top: 120px;
+  }
+
+  iframe {
+    border: none;
+  }
+</style>

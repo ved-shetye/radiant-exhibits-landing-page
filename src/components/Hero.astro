@@ -1,0 +1,123 @@
+---
+import { Image } from 'astro:assets';
+
+/* Separate images */
+import heroDesktop from '../assets/Hero/hero_bg3.jpeg';
+import heroMobile from '../assets/Hero/hero_background.jpeg';
+
+const embedUrl = import.meta.env.PUBLIC_PIPEDRIVE_EMBED_URL;
+---
+
+<section
+  id="home"
+  class="relative min-h-[85vh] lg:min-h-screen flex items-center pt-28 overflow-hidden bg-white lg:bg-[#020617] font-sans"
+>
+  <!-- Desktop Background -->
+  <div class="absolute inset-0 z-0 hidden lg:block" data-reveal data-delay="0">
+    <Image
+      src={heroDesktop}
+      alt="Avante Displays Manufacturing"
+      class="w-full h-full object-cover object-center"
+    />
+    <div class="absolute inset-0 bg-black/70"></div>
+  </div>
+
+  <!-- Mobile Background -->
+  <div class="absolute inset-0 z-0 lg:hidden mobile-pattern-bg"></div>
+
+  <div class="relative z-10 max-w-7xl mx-auto px-6 py-8 w-full">
+    <div class="grid lg:grid-cols-2 gap-8 items-center">
+
+      <!-- Left Content -->
+      <div class="text-secondary lg:text-white space-y-5 max-w-2xl text-center lg:text-left mx-auto lg:mx-0">
+
+        <!-- Mobile Hero Image -->
+        <div class="block lg:hidden mb-8" data-reveal data-delay="1">
+          <Image
+            src={heroMobile}
+            alt="Avante Displays Manufacturing"
+            class="w-full h-[230px] rounded-2xl shadow-xl object-cover object-center"
+          />
+        </div>
+
+        <h1
+          class="text-[35px] md:text-[45px] font-[800] leading-[1.1] tracking-tight !text-secondary lg:!text-white"
+          data-reveal
+          data-delay="1"
+        >
+          #1 Custom Trade Show Booth Designer in Canada
+        </h1>
+
+        <p
+          class="text-[16px] md:text-[20px] text-gray-600 lg:text-gray-200 font-normal max-w-xl leading-relaxed mx-auto lg:mx-0"
+          data-reveal
+          data-delay="2"
+        >
+           End-to-End Trade show service from Design to Installation - 
+          <span class="text-gray-500 lg:text-gray-300">
+            Crafting Trade show Exhibits that stand out and increase visibility
+          </span>
+        </p>
+
+        <div
+          class="flex flex-wrap gap-4 justify-center lg:justify-start"
+          data-reveal-left
+          data-delay="3"
+        >
+          <a
+            href="#contact"
+            class="bg-primary hover:bg-primary/90 text-xl text-white px-10 py-3 rounded-2xl font-black transition-all duration-300 shadow-lg hover:scale-105 active:scale-95"
+          >
+            Request Quote
+          </a>
+
+          <a
+            href="#contact"
+            class="bg-secondary lg:bg-white hover:opacity-90 lg:hover:bg-gray-100 text-xl text-white lg:text-secondary px-10 py-3 rounded-2xl font-black transition-all duration-300 shadow-md hover:scale-105 active:scale-95"
+          >
+            Get Free Booth Design
+          </a>
+        </div>
+      </div>
+
+      <!-- Right Form -->
+      <div class="lg:ml-auto w-full max-w-lg" data-reveal data-delay="2">
+        <div
+          class="bg-[#012234] backdrop-blur-sm pt-4 pb-2 px-6 md:px-8 rounded-[2rem] shadow-2xl border border-white/10"
+        >
+          <h3 class="text-[25px] font-bold !text-white mb-2 text-center tracking-wide">
+            Contact Us
+          </h3>
+
+          <div
+            class="pipedriveWebForms"
+            data-pd-webforms={embedUrl}
+          ></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<script is:inline src="https://webforms.pipedrive.com/f/loader"></script>
+
+<style>
+  .pipedriveWebForms {
+    filter: invert(1) hue-rotate(180deg);
+  }
+
+  .pipedriveWebForms iframe {
+    width: 100% !important;
+    min-height: 560px;
+    border: none !important;
+    background: transparent !important;
+    color-scheme: dark;
+  }
+
+  .mobile-pattern-bg {
+    background-color: #ffffff;
+    background-size: 28px 28px;
+    opacity: 1;
+  }
+</style>

@@ -1,0 +1,232 @@
+---
+import { Image } from 'astro:assets';
+
+const imageModules = import.meta.glob(
+  '../assets/PortfolioImages/*.{jpg,jpeg,png,JPG,JPEG,PNG}',
+  { eager: true }
+);
+
+const slides = Object.entries(imageModules)
+  .sort(([a], [b]) => a.localeCompare(b))
+  .map(([, mod]) => (mod as any).default);
+---
+
+<section id="portfolio" class="py-10 bg-surface overflow-hidden">
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6 text-center">
+        <h4 class="flex items-center justify-center uppercase tracking-[0.2em] text-[14px] md:text-[18px] font-black !text-black">
+            <span class="flex-grow border-t-2 border-slate-900 mr-4 max-w-[60px]"></span>
+                Our Latest Work
+            <span class="flex-grow border-t-2 border-slate-900 ml-4 max-w-[60px]"></span>
+        </h4>
+        <h2 class="text-[29px] md:text-[44px] font-[900] text-secondary leading-tight" data-reveal data-delay="1">
+            Custom Booth Portfolio
+        </h2>
+    </div>
+
+    <!-- Slider 1 -->
+    <div class="marquee-wrapper" data-reveal data-delay="6">
+        <div class="marquee-viewport" id="dragTrack1">
+            <div class="marquee-strip" id="marqueeStrip1">
+                {[...slides, ...slides].map((img, i) => (
+                    <div class="marquee-card">
+                        <Image
+                            src={img}
+                            alt={`Portfolio ${(i % slides.length) + 1}`}
+                            class="marquee-img"
+                            draggable="false"
+                        />
+                    </div>
+                ))}
+            </div>
+        </div>
+    </div>
+
+    <!-- Slider 2 (reverse direction) -->
+    <div class="marquee-wrapper mt-6" data-reveal data-delay="6">
+        <div class="marquee-viewport" id="dragTrack2">
+            <div class="marquee-strip reverse" id="marqueeStrip2">
+                {[...slides, ...slides].map((img, i) => (
+                    <div class="marquee-card">
+                        <Image
+                            src={img}
+                            alt={`Portfolio ${(i % slides.length) + 1}`}
+                            class="marquee-img"
+                            draggable="false"
+                        />
+                    </div>
+                ))}
+            </div>
+        </div>
+    </div>
+
+    <div class="flex justify-center mt-8" data-reveal-left data-delay="5">
+        <a href="#contact" class="bg-primary hover:bg-primary/90 text-white px-12 py-3 rounded-2xl text-lg md:text-xl font-bold transition-all shadow-xl shadow-primary/25 hover:scale-105 active:scale-95">
+            Request Instant Quote
+        </a>
+    </div>
+
+</section>
+
+<script>
+function initMarquee(viewportId, stripId) {
+    const viewport = document.getElementById(viewportId);
+    const strip = document.getElementById(stripId);
+
+    if (!viewport || !strip) return;
+    if (viewport.dataset.ready === "true") return;
+    viewport.dataset.ready = "true";
+
+    let isDown = false;
+    let startX, startY, startScroll;
+    let mode = null;
+    
+    let velocity = 0;
+    let lastX = 0;
+    let lastTime = 0;
+    let rafId = null;
+
+    const loopWidth = () => strip.scrollWidth / 2;
+
+    function normalize() {
+        const lw = loopWidth();
+        if (viewport.scrollLeft <= 0) viewport.scrollLeft += lw;
+        if (viewport.scrollLeft >= lw) viewport.scrollLeft -= lw;
+    }
+
+    // 🔥 Continuous loop fix (prevents gaps ALWAYS)
+    function autoNormalize() {
+        normalize();
+        requestAnimationFrame(autoNormalize);
+    }
+
+    // 🔥 Fixed momentum (no sticking)
+    function applyMomentum() {
+        if (Math.abs(velocity) < 0.1) return;
+
+        viewport.scrollLeft -= velocity;
+
+        normalize(); // IMPORTANT: before decay
+
+        velocity *= 0.95;
+
+        rafId = requestAnimationFrame(applyMomentum);
+    }
+
+    function start(x, y) {
+        isDown = true;
+        mode = null;
+        startX = x;
+        startY = y;
+        lastX = x;
+        lastTime = Date.now();
+        startScroll = viewport.scrollLeft;
+        cancelAnimationFrame(rafId);
+        strip.style.animationPlayState = "paused";
+    }
+
+    function move(e, x, y) {
+        if (!isDown) return;
+
+        const dx = x - startX;
+        const dy = y - startY;
+
+        if (!mode) {
+            if (Math.abs(dx) < 5 && Math.abs(dy) < 5) return;
+            mode = Math.abs(dx) > Math.abs(dy) ? "x" : "y";
+        }
+
+        if (mode === "x") {
+            if (e.cancelable) e.preventDefault();
+            
+            const now = Date.now();
+            const dt = now - lastTime;
+
+            if (dt > 0) {
+                velocity = (x - lastX);
+                lastX = x;
+                lastTime = now;
+            }
+
+            viewport.scrollLeft = startScroll - dx;
+            normalize();
+        }
+    }
+
+    function end() {
+        isDown = false;
+
+        if (mode === "x") {
+            rafId = requestAnimationFrame(applyMomentum);
+
+            setTimeout(() => {
+                if (!isDown && Math.abs(velocity) < 0.2) {
+                    strip.style.animationPlayState = "running";
+                }
+            }, 1000);
+        } else {
+            strip.style.animationPlayState = "running";
+        }
+
+        viewport.classList.remove("dragging");
+    }
+
+    // Initial position
+    viewport.scrollLeft = loopWidth() / 2;
+
+    // 🔥 Start infinite correction loop
+    autoNormalize();
+
+    // Touch
+    viewport.addEventListener("touchstart", (e) => 
+        start(e.touches[0].clientX, e.touches[0].clientY), { passive: false }
+    );
+
+    viewport.addEventListener("touchmove", (e) => 
+        move(e, e.touches[0].clientX, e.touches[0].clientY), { passive: false }
+    );
+
+    viewport.addEventListener("touchend", end);
+
+    // Mouse
+    viewport.addEventListener("mousedown", (e) => {
+        start(e.clientX, e.clientY);
+        viewport.classList.add("dragging");
+    });
+
+    window.addEventListener("mousemove", (e) => move(e, e.clientX, e.clientY));
+    window.addEventListener("mouseup", end);
+}
+
+// INIT BOTH
+initMarquee("dragTrack1", "marqueeStrip1");
+initMarquee("dragTrack2", "marqueeStrip2");
+
+document.addEventListener("astro:after-swap", () => {
+    initMarquee("dragTrack1", "marqueeStrip1");
+    initMarquee("dragTrack2", "marqueeStrip2");
+});
+</script>
+
+<style>
+.marquee-viewport {
+    touch-action: pan-y;
+    overflow: hidden;
+    cursor: grab;
+    user-select: none;
+}
+
+.marquee-viewport.dragging {
+    cursor: grabbing;
+}
+
+.marquee-strip.reverse {
+    animation-direction: reverse;
+}
+
+/* Prevent images from being dragged/ghosted by the browser */
+.marquee-viewport img {
+    pointer-events: none;
+    -webkit-user-drag: none;
+}
+</style>

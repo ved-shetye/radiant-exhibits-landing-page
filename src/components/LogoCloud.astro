@@ -1,0 +1,68 @@
+---
+import { Image } from 'astro:assets';
+
+import logo1 from '../assets/CompanyLogos/brondell.webp';
+import logo2 from '../assets/CompanyLogos/wander+ivy.png';
+import logo3 from '../assets/CompanyLogos/hirsh.png';
+import logo4 from '../assets/CompanyLogos/redbarn.png';
+import logo5 from '../assets/CompanyLogos/trex.webp';
+import logo6 from '../assets/CompanyLogos/mysalonstop.png';
+import logo7 from '../assets/CompanyLogos/kong.webp';
+import logo8 from '../assets/CompanyLogos/ledvance.png';
+
+const logos = [
+  { src: logo1, alt: 'Client Logo 1' },
+  { src: logo2, alt: 'Client Logo 2' },
+  { src: logo3, alt: 'Client Logo 3' },
+  { src: logo4, alt: 'Client Logo 4' },
+  { src: logo5, alt: 'Client Logo 5' },
+  { src: logo6, alt: 'Client Logo 6' },
+  { src: logo7, alt: 'Client Logo 7' },
+  { src: logo8, alt: 'Client Logo 8' },
+];
+---
+
+<section id="clients" class="py-8 bg-gray-100 overflow-hidden">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-4 text-center">
+    <h2 class="flex items-center justify-center uppercase text-[22px] font-black !text-black">
+        Our Clients
+    </h2>
+  </div>
+
+  <div class="flex overflow-hidden py-1" data-reveal data-delay="2">
+    <div class="flex gap-8 logo-ticker items-center">
+      {[...logos, ...logos, ...logos, ...logos].map((logo) => (
+        <div
+          class="bg-white px-8 py-6 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-center min-w-[220px] h-28 hover:shadow-md hover:border-secondary/20 transition-all duration-300 flex-shrink-0"
+        >
+          <Image
+            src={logo.src}
+            alt={logo.alt}
+            class="max-h-16 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-300"
+            loading="lazy"
+          />
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .logo-ticker {
+    animation: logoScroll 32s linear infinite;
+    white-space: nowrap;
+  }
+
+  .logo-ticker:hover {
+    animation-play-state: paused;
+  }
+
+  @keyframes logoScroll {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-33.33%);
+    }
+  }
+</style>

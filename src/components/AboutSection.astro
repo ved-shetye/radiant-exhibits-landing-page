@@ -1,0 +1,96 @@
+---
+import { Image } from 'astro:assets';
+import aboutImg from '../assets/AboutUsImg.webp';
+import { BarChart3, Eye, MousePointer2 } from 'lucide-astro';
+
+const usps = [
+  { 
+    title: "Boost Sales Instantly", 
+    desc: "Well-placed, eye-catching displays are proven to increase product sales by up to 20% (and beyond).", 
+    icon: BarChart3 
+  },
+  { 
+    title: "Increase Visibility", 
+    desc: "Shoppers are 64% more likely to buy a product they see first.", 
+    icon: Eye 
+  },
+  { 
+    title: "Tell Your Brand Story", 
+    desc: "Our displays don't just hold products — they connect shoppers with your product.", 
+    icon: MousePointer2 
+  },
+];
+---
+
+<section id="about" class="py-10 bg-white overflow-hidden">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
+      
+      <div class="w-full lg:w-3/5 space-y-8 text-center lg:text-left" data-reveal>
+        <div>
+          <h4 class="!text-gray-800 font-bold text-[22px] md:text-2xl mb-2">
+            Introducing Avante Custom Displays
+          </h4>
+          <h2 class="text-[32px] md:text-[40px] font-extrabold text-secondary leading-[1.1]">
+            Make Your Brand Un-ignorable
+          </h2>
+        </div>
+
+        <div class="space-y-4 text-gray-600 text-lg leading-relaxed max-w-2xl mx-auto lg:mx-0">
+          <p>
+            Change browsers into buyers with a custom POP display that demands attention. 
+            Make your product impossible to ignore with bold visuals and strategic 
+            placement that prompts shoppers to take action.
+          </p>
+          <p>
+            It's not just about being noticed; it's about inspiring impulse buys and repeat sales.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
+          {usps.map((usp, i) => (
+            <div 
+              class="flex flex-col items-center text-center gap-3 group" 
+              data-reveal 
+              data-delay={(i + 1).toString()}
+            >
+              <div class="text-secondary bg-blue-50 p-4 rounded-full group-hover:bg-secondary group-hover:text-white transition-all duration-300 shadow-sm">
+                <usp.icon class="w-7 h-7" />
+              </div>
+              <h4 class="font-bold text-secondary text-base leading-tight">
+                {usp.title}
+              </h4>
+              <p class="text-gray-500 text-sm leading-relaxed">
+                {usp.desc}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div class="w-full lg:w-3/5 relative group mx-auto" data-reveal data-delay="1">
+        <div class="absolute -inset-4 bg-accent/30 rounded-[40px] -z-10 group-hover:scale-[1.02] transition-transform duration-500"></div>
+        
+        <div class="rounded-[28px] overflow-hidden shadow-2xl group-hover:shadow-3xl transition-shadow duration-500 bg-white">
+          <Image 
+            src={aboutImg} 
+            alt="Retail shopper interacting with products on a display shelf" 
+            class="w-full h-auto object-contain group-hover:scale-[1.04] transition-transform duration-700"
+            widths={[400, 800, aboutImg.width]}
+            sizes="(max-width: 1024px) 100vw, 40vw"
+          />
+        </div>
+      </div>
+
+    </div>
+
+    <div class="flex justify-center pt-8 md:pt-4" data-reveal-left data-delay="2">
+      <a 
+        href="#contact" 
+        class="bg-primary hover:bg-[#d4672d] text-white px-12 py-4 rounded-2xl text-xl font-extrabold transition-all duration-300 shadow-lg hover:scale-105 active:scale-95 text-center"
+      >
+        Book Consultation
+      </a>
+    </div>
+  </div>
+</section>

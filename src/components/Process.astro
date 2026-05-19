@@ -1,0 +1,92 @@
+---
+import { 
+  MessageSquare, 
+  Box, 
+  Hammer, 
+  Truck, 
+  Lightbulb, 
+  UserCheck 
+} from 'lucide-astro';
+
+const steps = [
+    { 
+        num: "01", 
+        title: "Free Consultation", 
+        description: "Book a free strategy consultation with our trade show display experts on \nCost, Design, Size, Maximizing Visibility, Brand Guidelines and Goals, Interactivity, etc.", 
+        Icon: MessageSquare 
+    },
+    { 
+        num: "02", 
+        title: "3D Booth Design", 
+        description: "Our design team comes up with amazing 3d mockups of what your booth \nwill look like in real time with our cutting-edge software.", 
+        Icon: Box 
+    },
+    { 
+        num: "03", 
+        title: "Booth Assembly & Installation", 
+        description: "Our installation team will be there at the exhibition and complete \nthe end-to-end assembly, setup, and installation of your booth as decided.", 
+        Icon: Hammer 
+    },
+    { 
+        num: "04", 
+        title: "Storage, Logistics & Dismantling", 
+        description: "We will ship, store, and manage your booth most cost-effectively with our \nStrategic Planning with respect to shipping rates, labour, and storage partners, etc.", 
+        Icon: Truck 
+    },
+    { 
+        num: "05", 
+        title: "Cost-Friendly Exhibition Rentals", 
+        description: "We will help you get any rentals required for your exhibition - including \nfurniture, flooring, lighting, LED, engagement technologies, photo/video, etc.", 
+        Icon: Lightbulb 
+    },
+    { 
+        num: "06", 
+        title: "Courteous Concierge Service", 
+        description: "From hotel bookings to personnel transportation & even managing Exhibition \norganizer for NOCs, Approvals, and discounts—offered at no additional cost.", 
+        Icon: UserCheck 
+    },
+];
+---
+
+<section id="services" class="py-8 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        <div class="text-center mb-12">
+            <h4 class="flex items-center justify-center uppercase tracking-[0.2em] text-[14px] md:text-[18px] font-black !text-black">
+                <span class="flex-grow border-t-2 border-slate-900 mr-4 max-w-[60px]"></span>
+                    Our Services
+                <span class="flex-grow border-t-2 border-slate-900 ml-4 max-w-[60px]"></span>
+            </h4>
+            <h2 class="text-[28px] md:text-[44px] font-[900] text-secondary leading-tight" data-reveal data-delay="1">
+                Truly End to End - Design to Installation to Concierge
+            </h2>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {steps.map((step, i) => (
+                <div
+                    class="relative group pt-6 px-8 pb-6 rounded-[28px] bg-gray-100 border border-transparent hover:border-secondary/20 hover:shadow-lg transition-all duration-300"
+                    data-reveal-left
+                    data-delay="6"
+                >
+                    <div class="flex justify-between items-start mb-5">
+                        <div class="w-10 h-10 border-2 border-secondary rounded-xl flex items-center justify-center text-secondary group-hover:bg-secondary group-hover:text-white transition-all duration-300">
+                            <step.Icon class="w-5 h-5 stroke-2" />
+                        </div>
+                        <span class="text-4xl font-black text-secondary/20 group-hover:text-secondary/50 transition-colors duration-300">
+                            {step.num}
+                        </span>
+                    </div>
+                    <h3 class="text-xl font-black text-secondary mb-3">{step.title}</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed">{step.description}</p>
+                </div>
+            ))}
+        </div>
+
+        <div class="flex justify-center mt-6" data-reveal-left data-delay="5">
+            <a href="#contact" class="bg-primary hover:bg-primary/90 text-white px-12 py-3 rounded-2xl text-lg md:text-xl font-bold transition-all shadow-xl shadow-primary/25 hover:scale-105 active:scale-95">
+                Book Consultation
+            </a>
+        </div>
+    </div>
+</section>

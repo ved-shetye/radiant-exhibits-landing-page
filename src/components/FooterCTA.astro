@@ -1,0 +1,110 @@
+---
+import { Image } from 'astro:assets';
+import bgImg from '../assets/PortfolioImages/682051_alliance_photomain.webp';
+
+const embedUrl = import.meta.env.PUBLIC_PIPEDRIVE_EMBED_URL;
+---
+
+<section id="contact" class="relative py-6 overflow-hidden min-h-screen flex items-center">
+    <!-- Background -->
+    <div class="absolute inset-0">
+        <Image src={bgImg} alt="Retail Excellence" class="w-full h-[900px] object-cover" />
+        <div class="absolute inset-0 bg-black/60"></div>
+    </div>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full">
+        <div class="grid lg:grid-cols-2 gap-14 items-center">
+
+            <!-- LEFT TEXT BOX -->
+            <div
+                class="bg-white/10 backdrop-blur-md border border-white/15 rounded-[2rem] p-6 md:p-10 shadow-2xl text-white space-y-7"
+                data-reveal
+            >
+                <h2
+                    class="text-[32px] md:text-[44px] !text-white font-extrabold leading-[1.1] tracking-tight"
+                    data-reveal
+                    data-delay="1"
+                >
+                    Ready to make your Brand Stand out at the next Trade show? 
+                </h2>
+
+                <p
+                    class="text-lg md:text-xl text-white/95 font-semibold leading-relaxed max-w-xl"
+                    data-reveal
+                    data-delay="2"
+                >
+                    Let's build a custom booth strategy together.
+                </p>
+
+                <ul
+                    class="space-y-4 text-base md:text-lg font-bold text-white"
+                    data-reveal
+                    data-delay="3"
+                >
+                    <li class="flex items-center gap-3">
+                        <span class="text-white text-xl shrink-0">✓</span>
+                        Free Booth Design in 72 Hours 
+                    </li>
+
+                    <li class="flex items-center gap-3">
+                        <span class="text-white text-xl shrink-0">✓</span>
+                        Unique Booth Designs
+                    </li>
+
+                    <li class="flex items-center gap-3">
+                        <span class="text-white text-xl shrink-0">✓</span>
+                        End-to-End Service
+                    </li>
+                </ul>
+            </div>
+
+            <!-- RIGHT FORM -->
+            <div class="lg:ml-auto w-full max-w-lg" data-reveal data-delay="2">
+                <div
+                    class="bg-[#012234]/95 backdrop-blur-sm pt-4 pb-2 px-6 md:px-8 rounded-[2rem] shadow-2xl border border-white/10"
+                >
+                    <h3 class="text-[25px] font-bold !text-white mb-2 text-center tracking-wide">
+                        Contact Us
+                    </h3>
+
+                    <div
+                        class="pipedriveWebForms"
+                        data-pd-webforms={embedUrl}
+                    ></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<script
+    is:inline
+    src="https://webforms.pipedrive.com/f/loader"
+></script>
+
+<script is:inline>
+window.addEventListener('message', function(e) {
+    if (
+        e.data &&
+        typeof e.data === 'object' &&
+        e.data.type === 'form-submitted'
+    ) {
+        window.location.href = '/pop-display-ads/thankyou';
+    }
+});
+</script>
+
+<style>
+.pipedriveWebForms {
+    filter: invert(1) hue-rotate(180deg);
+}
+
+.pipedriveWebForms iframe {
+    width: 100% !important;
+    min-height: 560px;
+    border: none !important;
+    background: transparent !important;
+    color-scheme: dark;
+}
+</style>

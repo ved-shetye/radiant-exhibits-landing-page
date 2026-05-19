@@ -1,0 +1,190 @@
+---
+import "../styles/global.css";
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/jpeg" href="/logoimg.png" />
+		<meta name="generator" content={Astro.generator} />
+		<title>#1 Custom Trade Show Booth in Canada | Radiant Exhibits</title>
+	</head>
+	<body>
+		<slot />
+
+		<!-- Floating Call Button -->
+		<a
+			href="tel:416-412-0500"
+			aria-label="Call Radiant Exhibits"
+			class="floating-call"
+		>
+			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+				<path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24 11.47 11.47 0 003.58.57 1 1 0 011 1V21a1 1 0 01-1 1A17 17 0 013 5a1 1 0 011-1h3.5a1 1 0 011 1 11.47 11.47 0 00.57 3.58 1 1 0 01-.25 1.01l-2.2 2.2z"/>
+			</svg>
+		</a>
+
+		<script>
+			function initReveal() {
+				const els = document.querySelectorAll('[data-reveal], [data-reveal-left]');
+
+				const observer = new IntersectionObserver(
+					(entries) => {
+						entries.forEach((entry) => {
+							if (entry.isIntersecting) {
+								entry.target.classList.add('is-visible');
+							} else {
+								entry.target.classList.remove('is-visible');
+							}
+						});
+					},
+					{ threshold: 0, rootMargin: '0px' }
+				);
+
+				els.forEach((el) => observer.observe(el));
+
+				setTimeout(() => {
+					els.forEach((el) => {
+						const rect = el.getBoundingClientRect();
+						if (rect.top < window.innerHeight) {
+							el.classList.add('is-visible');
+						}
+					});
+				}, 100);
+			}
+
+			initReveal();
+			document.addEventListener('astro:after-swap', initReveal);
+		</script>
+	</body>
+</html>
+
+<style>
+html,
+body {
+	margin: 0;
+	width: 100%;
+	height: 100%;
+}
+
+/* MAIN BUTTON */
+.floating-call{
+	position: fixed;
+	right: 40px;
+	bottom: 22px;
+	z-index: 9999;
+
+	width: 60px;
+	height: 60px;
+	border-radius: 50%;
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	background: #E76E32;
+	color: #fff;
+	text-decoration: none;
+
+	box-shadow:
+		0 10px 24px rgba(231,110,50,.35),
+		0 0 0 0 rgba(231,110,50,.25);
+
+	transition:
+		transform .25s ease,
+		box-shadow .25s ease;
+
+	/* vibration every 3 sec */
+	animation: phoneBuzz 2s infinite;
+}
+
+/* ICON */
+.floating-call svg{
+	width: 28px;
+	height: 28px;
+	position: relative;
+	z-index: 3;
+}
+
+/* SCALE EFFECT BOTH MOBILE + DESKTOP */
+.floating-call:hover{
+	transform: scale(1.08);
+	box-shadow:
+		0 14px 30px rgba(231,110,50,.42),
+		0 0 0 8px rgba(231,110,50,.08);
+}
+
+.floating-call:active{
+	transform: scale(.94);
+}
+
+/* GLOW RING */
+.floating-call::before{
+	content:"";
+	position:absolute;
+	inset:-6px;
+	border-radius:50%;
+	border:2px solid rgba(231,110,50,.35);
+	animation:ringPulse 3s infinite;
+	z-index:1;
+}
+
+.floating-call::after{
+	content:"";
+	position:absolute;
+	inset:-12px;
+	border-radius:50%;
+	border:2px solid rgba(231,110,50,.18);
+	animation:ringPulse 3s infinite .25s;
+	z-index:1;
+}
+
+/* VIBRATION LIKE VIDEO */
+@keyframes phoneBuzz{
+	0%,72%,100%{
+		transform: translateX(0) rotate(0deg) scale(1);
+	}
+
+	74%{ transform: translateX(-2px) rotate(-8deg) scale(1.04); }
+	76%{ transform: translateX(2px) rotate(8deg) scale(1.04); }
+	78%{ transform: translateX(-2px) rotate(-8deg) scale(1.04); }
+	80%{ transform: translateX(2px) rotate(8deg) scale(1.04); }
+	82%{ transform: translateX(-1px) rotate(-5deg) scale(1.03); }
+	84%{ transform: translateX(1px) rotate(5deg) scale(1.03); }
+	86%{ transform: translateX(0) rotate(0deg) scale(1); }
+}
+
+/* OUTER RINGS */
+@keyframes ringPulse{
+	0%,70%,100%{
+		transform: scale(.9);
+		opacity:0;
+	}
+
+	78%{
+		transform: scale(1.15);
+		opacity:.55;
+	}
+
+	88%{
+		transform: scale(1.45);
+		opacity:0;
+	}
+}
+
+/* MOBILE */
+@media (max-width: 768px){
+	.floating-call{
+		right:18px;
+		bottom:18px;
+		width:56px;
+		height:56px;
+	}
+
+	.floating-call svg{
+		width:26px;
+		height:26px;
+	}
+}
+</style>
