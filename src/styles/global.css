@@ -187,7 +187,7 @@ html {
     gap: 22px;
     width: max-content;
     padding: 10px 0;
-    animation: marqueeScroll 42s linear infinite;
+    animation: marqueeScroll 60s linear infinite;
     will-change: transform;
 }
 

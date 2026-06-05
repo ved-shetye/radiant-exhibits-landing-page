@@ -1,19 +1,24 @@
 ---
-// Standardize the captions and delay based on your uniform animation rules
+import { Image } from 'astro:assets';
+
+import hybridImg from '../assets/Displays/1.webp';
+import modularImg from '../assets/Displays/2.webp';
+import rentalImg from '../assets/Displays/3.webp';
+
 const categories = [
     {
         title: "Custom Hybrid Booths",
-        img: "https://images.unsplash.com/photo-1565034946487-077786996e27?q=80&w=1000&auto=format&fit=crop",
+        img: hybridImg,
         delay: "1"
     },
     {
         title: "Modular Booths",
-        img: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=1000&auto=format&fit=crop",
+        img: modularImg,
         delay: "2"
     },
     {
         title: "Rental Options",
-        img: "https://images.unsplash.com/photo-1475721027785-f74dea9f2672?q=80&w=1000&auto=format&fit=crop",
+        img: rentalImg,
         delay: "3"
     }
 ];
@@ -32,11 +37,10 @@ const categories = [
                 >
                     <!-- Image Container: Matching the 2rem rounded corners from image_d556b5.jpg -->
                     <div class="w-full aspect-[4/3] rounded-[2rem] overflow-hidden shadow-2xl transition-all duration-500 group-hover:shadow-primary/20">
-                        <img 
+                        <Image 
                             src={item.img} 
                             alt={item.title}
                             class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                            loading="lazy"
                         />
                     </div>
 
