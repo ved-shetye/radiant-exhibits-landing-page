@@ -1,7 +1,6 @@
 ---
 import { Image } from 'astro:assets';
 import logoImg from '../assets/logo.png';
-import { MapPin, Mail, Phone, ChevronRight } from 'lucide-astro';
 
 const contactInfo = {
   email: "Sales@radiantexhibits.com",
@@ -12,102 +11,98 @@ const contactInfo = {
 };
 ---
 
-<footer class="bg-dark text-white pt-12 pb-6 font-sans border-t border-white/5">
-  <div class="max-w-7xl mx-auto px-6 lg:px-8">
-    
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-12 pb-8">
+<footer class="relative bg-[#0077B6] text-white pt-10 pb-10 overflow-hidden font-sans">
+  
+  <div class="absolute top-0 right-0 w-[550px] h-[550px] bg-white/5 rounded-full blur-[110px] pointer-events-none -translate-y-1/2 translate-x-1/4"></div>
+  <div class="absolute bottom-0 left-0 w-[350px] h-[350px] bg-black/10 rounded-full blur-[90px] pointer-events-none translate-y-1/3 -translate-x-1/4"></div>
 
-      <div class="space-y-6">
-        <div class="flex items-center">
-          <a href="/" class="transition-opacity hover:opacity-80">
+  <div class="relative max-w-7xl mx-auto px-6 lg:px-8 z-10">
+
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-y-12 gap-x-8 lg:gap-x-16 pb-16 border-b border-white/10">
+
+      <div class="space-y-6 text-center md:text-left md:col-span-5">
+        <div class="flex items-center justify-center md:justify-start">
+          <a href="/" class="inline-block hover:opacity-90 transition-opacity duration-300">
             <Image
               src={logoImg}
               alt="Radiant Exhibits Logo"
-              class="h-18 w-auto object-contain brightness-0 invert"
+              class="h-11 md:h-17 w-auto object-contain brightness-0 invert"
             />
           </a>
         </div>
-        <div class="space-y-6">
-          <p class="text-accent text-sm leading-relaxed max-w-[300px] font-medium">
-            {contactInfo.tagline}
-          </p>
-        </div>
+        <p class="text-white/80 text-[17px] max-w-[400px] font-medium mx-auto md:mx-0">
+          {contactInfo.tagline}
+        </p>
       </div>
 
-      <!-- Quick Links Section -->
-      <div>
-        <h4 class="text-primary font-black text-xl mb-8 uppercase tracking-wider">Quick Links</h4>
-        <ul class="space-y-4">
+      <div class="text-center md:text-left md:col-span-3 lg:pl-6">
+        <h4 class="!text-white font-black text-xs md:text-[18px] uppercase tracking-[0.2em] mb-6 relative inline-block after:content-[''] after:absolute after:left-1/2 after:md:left-0 after:-bottom-2 after:-translate-x-1/2 after:md:translate-x-0 after:w-6 after:h-[2px] after:bg-[#E76E32]">
+          Quick Links
+        </h4>
+        <ul class="space-y-3.5 flex flex-col items-center md:items-start mt-2">
           {[
-            { label: 'Home',      href: '#home'      },
-            { label: 'Key Benefits',     href: '#features'  },
+            { label: 'Home', href: '#home' },
+            { label: 'Key Benefits', href: '#features' },
             { label: 'Portfolio', href: '#portfolio' },
-            { label: 'Services',  href: '#services'  },
+            { label: 'Services', href: '#services' },
           ].map(link => (
             <li>
-              <a href={link.href} class="text-white/80 hover:text-primary transition-all duration-300 flex items-center gap-2 group text-base">
-                <ChevronRight size={14} class="text-primary group-hover:translate-x-1 transition-transform" />
+              <a href={link.href}
+                class="relative block text-white/80 hover:text-[#E76E32] transition-colors duration-300 text-[14px] font-bold tracking-wide py-0.5 group">
                 {link.label}
+                <span class="absolute bottom-0 left-0 w-full h-[1.5px] bg-[#E76E32] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
               </a>
             </li>
           ))}
         </ul>
       </div>
 
-      <!-- Contact Us Section -->
-      <div>
-        <h4 class="text-primary font-black text-xl mb-8 uppercase tracking-wider">Contact Us</h4>
-        <div class="space-y-6">
-          <!-- Direct Address Placement -->
-          <div class="flex items-start gap-4 group">
-            <div class="bg-white/5 p-2.5 rounded-lg group-hover:bg-primary/10 transition-colors shrink-0">
-              <MapPin size={20} class="text-primary" />
-            </div>
-            <div class="space-y-1">
-              <p class="text-xs uppercase tracking-widest text-white/40 font-bold">Office Address</p>
-              <p class="text-white font-medium leading-relaxed">
-                150 Milner Ave Unit #19,<br />
-                Toronto, ON M1S 3R3
-              </p>
-            </div>
+      <div class="text-center md:text-left md:col-span-4">
+        <h4 class="!text-white font-black text-xs md:text-[18px] uppercase tracking-[0.2em] mb-6 relative inline-block after:content-[''] after:absolute after:left-1/2 after:md:left-0 after:-bottom-2 after:-translate-x-1/2 after:md:translate-x-0 after:w-6 after:h-[2px] after:bg-[#E76E32]">
+          Contact Us
+        </h4>
+        
+        <div class="space-y-5 text-[14.5px] text-white/90 font-medium flex flex-col items-center md:items-start mt-2">
+
+          <div class="max-w-[280px] md:max-w-none leading-relaxed group">
+            <span class="text-[9px] uppercase tracking-widest text-white/40 font-black block mb-0.5 text-center md:text-left">Office Location</span>
+            <p class="text-white font-bold transition-colors group-hover:text-white/100">
+              {contactInfo.address}
+            </p>
           </div>
 
-          <div class="pt-2 space-y-4">
-             <a href={`mailto:${contactInfo.email}`} class="flex items-center gap-4 text-white hover:text-primary transition-colors group">
-              <div class="bg-white/5 p-2.5 rounded-lg group-hover:bg-primary/10 transition-colors shrink-0">
-                <Mail size={18} />
-              </div>
-              <span class="font-bold text-sm md:text-base">{contactInfo.email}</span>
-            </a>
-            
-            <a href={`tel:${contactInfo.phone.replace(/-/g, '')}`} class="flex items-center gap-4 text-white hover:text-primary transition-colors group">
-               <div class="bg-white/5 p-2.5 rounded-lg group-hover:bg-primary/10 transition-colors shrink-0">
-                <Phone size={18} />
-              </div>
-              <span class="font-bold text-sm md:text-base">{contactInfo.phone}</span>
+          <div class="leading-none">
+            <span class="text-[9px] uppercase tracking-widest text-white/40 font-black block mb-1 text-center md:text-left">Direct Mail</span>
+            <a href={`mailto:${contactInfo.email}`} class="inline-block text-white font-bold hover:text-[#E76E32] transition-colors duration-300 text-[15px]">
+              {contactInfo.email}
             </a>
           </div>
+
+          <div class="leading-none">
+            <span class="text-[9px] uppercase tracking-widest text-white/40 font-black block mb-1 text-center md:text-left">Telephone</span>
+            <a href={`tel:${contactInfo.phone.replace(/-/g, '')}`} class="inline-block text-white font-bold hover:text-[#E76E32] transition-colors duration-300 text-[15px]">
+              {contactInfo.phone}
+            </a>
+          </div>
+
         </div>
       </div>
 
     </div>
 
-    <!-- Bottom Bar -->
-    <div class="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-white/30 uppercase tracking-widest font-bold">
-      <p>© 2026 Radiant Exhibits. All Rights Reserved.</p>
-      
+    <div class="pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-[10px] md:text-xs text-white/40 uppercase tracking-[0.2em] font-bold text-center">
+      <p class="tracking-widest">© 2026 Radiant Exhibits. All Rights Reserved.</p>
+
       <div class="flex items-center gap-6">
-        <a href={contactInfo.termsUrl} target="_blank" class="hover:text-white transition-colors">Terms & Conditions</a>
+        <a href={contactInfo.termsUrl} class="hover:text-black/70 transition-colors duration-300">
+          Terms & Conditions
+        </a>
         <span class="text-white/10">|</span>
-        <a href={contactInfo.termsUrl} class="hover:text-white transition-colors">Privacy Policy</a>
+        <a href={contactInfo.termsUrl} class="hover:text-black/70 transition-colors duration-300">
+          Privacy Policy
+        </a>
       </div>
     </div>
 
   </div>
 </footer>
-
-<style>
-  .bg-dark { background-color: #012345; }
-  .text-primary { color: #E76E32; }
-  .text-accent { color: #C0EAF4; }
-</style>
