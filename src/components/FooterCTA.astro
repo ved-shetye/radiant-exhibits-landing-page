@@ -1,8 +1,6 @@
 ---
 import { Image } from 'astro:assets';
 import bgImg from '../assets/Hero/heroImg.jpeg';
-
-const embedUrl = import.meta.env.PUBLIC_PIPEDRIVE_EMBED_URL;
 ---
 
 <section id="contact" class="relative py-16 overflow-hidden flex items-center">
@@ -64,7 +62,7 @@ const embedUrl = import.meta.env.PUBLIC_PIPEDRIVE_EMBED_URL;
                         Get Instant Quote
                     </h3>
 
-                    <form class="space-y-3">
+                    <form id="footer-cta-form" class="space-y-3">
 
                         <!-- Name -->
                         <div>
@@ -150,33 +148,9 @@ const embedUrl = import.meta.env.PUBLIC_PIPEDRIVE_EMBED_URL;
     </div>
 </section>
 
-<script
-    is:inline
-    src="https://webforms.pipedrive.com/f/loader"
-></script>
-
 <script is:inline>
-window.addEventListener('message', function(e) {
-    if (
-        e.data &&
-        typeof e.data === 'object' &&
-        e.data.type === 'form-submitted'
-    ) {
-        window.location.href = '/pop-display-ads/thankyou';
-    }
+document.getElementById('footer-cta-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    window.location.href = '/thankyou';
 });
 </script>
-
-<style>
-.pipedriveWebForms {
-    filter: invert(1) hue-rotate(180deg);
-}
-
-.pipedriveWebForms iframe {
-    width: 100% !important;
-    /*min-height: 560px;*/
-    border: none !important;
-    background: transparent !important;
-    color-scheme: dark;
-}
-</style>
