@@ -28,18 +28,20 @@ const logos = [
 ];
 ---
 
-<section id="clients" class="pt-8 pb-14 bg-white overflow-hidden">
+<section id="clients" class="pt-8 pb-14 bg-white overflow-hidden select-none">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6 text-center">
     <h2 class="flex items-center justify-center uppercase text-[22px] md:text-[32px] font-black !text-black">
         Our Clients
     </h2>
   </div>
 
-  <div class="flex overflow-hidden py-1" data-reveal data-delay="2">
+  <!-- Using native horizontal scroll container (scrollbars hidden via CSS) -->
+  <div class="flex overflow-x-auto py-1 cursor-grab active:cursor-grabbing ticker-container scroll-smooth-none" data-reveal data-delay="2">
     <div class="flex gap-8 logo-ticker items-center">
-      {[...logos, ...logos, ...logos, ...logos].map((logo) => (
+      {/* We render two sets to handle seamless looping via scroll positioning */}
+      {[...logos, ...logos].map((logo) => (
         <div
-          class="bg-white px-8 py-6 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-center min-w-[220px] h-28 hover:shadow-md hover:border-secondary/20 transition-all duration-300 flex-shrink-0"
+          class="bg-white px-8 py-6 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-center min-w-[220px] h-28 hover:shadow-md hover:border-secondary/20 transition-all duration-300 flex-shrink-0 pointer-events-none"
         >
           <Image
             src={logo.src}
@@ -53,22 +55,82 @@ const logos = [
   </div>
 </section>
 
+<script is:inline>
+  const container = document.querySelector('.ticker-container');
+  
+  if (container) {
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+    let speed = 1; // Pixels per frame auto-scroll speed
+    let animationFrameId;
+
+    // 1. Auto Scroll Loop Function
+    function step() {
+      if (!isDown) {
+        container.scrollLeft += speed;
+        
+        // Loop back seamlessly when reaching halfway through the duplicate contents
+        const maxScroll = container.scrollWidth / 2;
+        if (container.scrollLeft >= maxScroll) {
+          container.scrollLeft -= maxScroll;
+        } else if (container.scrollLeft <= 0) {
+          container.scrollLeft += maxScroll;
+        }
+      }
+      animationFrameId = requestAnimationFrame(step);
+    }
+
+    // Initialize Auto-scroll loop
+    animationFrameId = requestAnimationFrame(step);
+
+    // 2. Drag Interaction Listeners
+    container.addEventListener('mousedown', (e) => {
+      isDown = true;
+      startX = e.pageX - container.offsetLeft;
+      scrollLeft = container.scrollLeft;
+    });
+
+    container.addEventListener('mouseleave', () => {
+      isDown = false;
+    });
+
+    container.addEventListener('mouseup', () => {
+      isDown = false;
+    });
+
+    container.addEventListener('mousemove', (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      
+      const x = e.pageX - container.offsetLeft;
+      const walk = (x - startX) * 1.5; // Drag sensitivity modifier
+      container.scrollLeft = scrollLeft - walk;
+
+      // Wrap around bounds check during manual drag
+      const maxScroll = container.scrollWidth / 2;
+      if (container.scrollLeft >= maxScroll) {
+        container.scrollLeft -= maxScroll;
+        startX = x - (scrollLeft - container.scrollLeft); // Reset baseline anchor points
+      } else if (container.scrollLeft <= 0) {
+        container.scrollLeft += maxScroll;
+        startX = x - (scrollLeft - container.scrollLeft);
+      }
+    });
+  }
+</script>
+
 <style>
+  /* Hide native scrollbars cleanly across browsers */
+  .ticker-container {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+  .ticker-container::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
+  }
+
   .logo-ticker {
-    animation: logoScroll 32s linear infinite;
     white-space: nowrap;
-  }
-
-  .logo-ticker:hover {
-    animation-play-state: paused;
-  }
-
-  @keyframes logoScroll {
-    0% {
-      transform: translateX(0);
-    }
-    100% {
-      transform: translateX(-33.33%);
-    }
   }
 </style>
