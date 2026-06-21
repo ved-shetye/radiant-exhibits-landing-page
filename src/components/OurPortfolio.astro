@@ -6,9 +6,20 @@ const imageModules = import.meta.glob(
   { eager: true }
 );
 
+// Map images and parse their file names to clean display labels
 const slides = Object.entries(imageModules)
   .sort(([a], [b]) => a.localeCompare(b))
-  .map(([, mod]) => (mod as any).default);
+  .map(([path, mod]) => {
+    // Extract file name without extension (e.g., "../assets/PortfolioImages/Harley-Davidson.jpg" -> "Harley Davidson")
+    const fileName = path.split('/').pop()?.split('.').shift() || '';
+    const cleanLabel = fileName.replace(/[-_]/g, ' ');
+
+    return {
+      src: (mod as any).default,
+      // Default label if specific metadata isn't present in filename
+      label: cleanLabel ? `${cleanLabel} | Exhibition Display` : "Radiant Exhibits Showcase Booth"
+    };
+  });
 ---
 
 <section id="portfolio" class="py-10 bg-surface overflow-hidden">
@@ -24,18 +35,23 @@ const slides = Object.entries(imageModules)
         </h2>
     </div>
 
-    <!-- Slider 1 -->
     <div class="marquee-wrapper" data-reveal data-delay="6">
         <div class="marquee-viewport" id="dragTrack1">
             <div class="marquee-strip" id="marqueeStrip1">
-                {[...slides, ...slides].map((img, i) => (
-                    <div class="marquee-card">
+                {[...slides, ...slides].map((slide, i) => (
+                    <div 
+                        class="marquee-card cursor-pointer group/card relative overflow-hidden rounded-2xl"
+                        data-index={i}
+                        data-src={slide.src.src}
+                        data-label={slide.label}
+                    >
                         <Image
-                            src={img}
-                            alt={`Portfolio ${(i % slides.length) + 1}`}
-                            class="marquee-img"
+                            src={slide.src}
+                            alt={slide.label}
+                            class="marquee-img transition-transform duration-500 group-hover/card:scale-105"
                             draggable="false"
                         />
+                        <div class="absolute inset-0 bg-black/10 opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
                     </div>
                 ))}
             </div>
@@ -47,6 +63,37 @@ const slides = Object.entries(imageModules)
             Request Instant Quote
         </a>
     </div>
+
+<div id="portfolioLightbox" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-lg opacity-0 pointer-events-none transition-opacity duration-300 flex flex-col items-center justify-center p-4">
+    <button id="closeLightbox" class="absolute top-6 right-6 text-white/80 hover:text-white bg-white/10 hover:bg-white/20 border border-white/10 p-3 rounded-full transition-all duration-200 z-10 hover:scale-110">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+    </button>
+
+    <div id="lightboxCounter" class="absolute top-6 left-6 text-white/60 text-sm font-semibold tracking-wider bg-white/5 border border-white/10 px-4 py-2 rounded-full z-10">
+        <span id="lightboxIndex">1</span> / <span id="lightboxTotal">8</span>
+    </div>
+
+    <button id="prevLightbox" class="absolute left-4 top-1/2 -translate-y-1/2 text-white/80 hover:text-white bg-white/10 hover:bg-[#1e3a5f]/60 border border-white/10 hover:border-[#3b6ea5]/50 p-3.5 rounded-xl transition-all duration-200 select-none z-10 hover:scale-105">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+            <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+    </button>
+    <button id="nextLightbox" class="absolute right-4 top-1/2 -translate-y-1/2 text-white/80 hover:text-white bg-white/10 hover:bg-[#1e3a5f]/60 border border-white/10 hover:border-[#3b6ea5]/50 p-3.5 rounded-xl transition-all duration-200 select-none z-10 hover:scale-105">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+            <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+    </button>
+
+    <div class="relative max-w-5xl max-h-[75vh] w-full h-full flex items-center justify-center">
+        <img id="lightboxImg" src="" alt="Expanded Portfolio Exhibit" class="max-w-full max-h-full object-contain rounded-xl shadow-2xl ring-1 ring-white/10 opacity-0 scale-95 transition-all duration-300" />
+    </div>
+
+    <div id="lightboxCaption" class="mt-6 text-white text-center font-bold tracking-wide text-sm md:text-xl bg-white/5 backdrop-blur-sm px-6 py-2.5 rounded-full border border-white/10 border-t-2 border-t-[#3b6ea5] shadow-lg max-w-xl truncate opacity-0 transition-opacity duration-300">
+        </div>
+</div>
 
 </section>
 
@@ -67,6 +114,7 @@ function initMarquee(viewportId, stripId) {
     let lastX = 0;
     let lastTime = 0;
     let rafId = null;
+    let currentActiveIndex = 0;
 
     const loopWidth = () => strip.scrollWidth / 2;
 
@@ -76,22 +124,16 @@ function initMarquee(viewportId, stripId) {
         if (viewport.scrollLeft >= lw) viewport.scrollLeft -= lw;
     }
 
-    // 🔥 Continuous loop fix (prevents gaps ALWAYS)
     function autoNormalize() {
         normalize();
         requestAnimationFrame(autoNormalize);
     }
 
-    // 🔥 Fixed momentum (no sticking)
     function applyMomentum() {
         if (Math.abs(velocity) < 0.1) return;
-
         viewport.scrollLeft -= velocity;
-
-        normalize(); // IMPORTANT: before decay
-
+        normalize();
         velocity *= 0.98;
-
         rafId = requestAnimationFrame(applyMomentum);
     }
 
@@ -140,7 +182,6 @@ function initMarquee(viewportId, stripId) {
 
         if (mode === "x") {
             rafId = requestAnimationFrame(applyMomentum);
-
             setTimeout(() => {
                 if (!isDown && Math.abs(velocity) < 0.2) {
                     strip.style.animationPlayState = "running";
@@ -155,38 +196,129 @@ function initMarquee(viewportId, stripId) {
 
     // Initial position
     viewport.scrollLeft = loopWidth() / 2;
-
-    // 🔥 Start infinite correction loop
     autoNormalize();
 
-    // Touch
+    // Touch events
     viewport.addEventListener("touchstart", (e) => 
         start(e.touches[0].clientX, e.touches[0].clientY), { passive: false }
     );
-
     viewport.addEventListener("touchmove", (e) => 
         move(e, e.touches[0].clientX, e.touches[0].clientY), { passive: false }
     );
-
     viewport.addEventListener("touchend", end);
 
-    // Mouse
+    // Mouse events
     viewport.addEventListener("mousedown", (e) => {
         start(e.clientX, e.clientY);
         viewport.classList.add("dragging");
     });
-
     window.addEventListener("mousemove", (e) => move(e, e.clientX, e.clientY));
     window.addEventListener("mouseup", end);
+
+    // Lightbox & Navigation Processing Element Handles
+    const lightbox = document.getElementById('portfolioLightbox');
+    const lightboxImg = document.getElementById('lightboxImg') as HTMLImageElement;
+    const lightboxCaption = document.getElementById('lightboxCaption');
+    const nextBtn = document.getElementById('nextLightbox');
+    const prevBtn = document.getElementById('prevLightbox');
+
+    if (lightbox && lightboxImg && lightboxCaption) {
+        const cards = Array.from(strip.querySelectorAll('.marquee-card'));
+        
+        const updateLightboxContent = (index: number) => {
+            const card = cards[index];
+            if (!card) return;
+
+            const targetSrc = card.getAttribute('data-src') || '';
+            const targetLabel = card.getAttribute('data-label') || '';
+
+            // Handle cross-fade smooth transform updates
+            lightboxImg.classList.add('opacity-0', 'scale-95');
+            lightboxCaption.classList.add('opacity-0');
+
+            setTimeout(() => {
+                lightboxImg.src = targetSrc;
+                lightboxCaption.textContent = targetLabel;
+                lightboxImg.classList.remove('opacity-0', 'scale-95');
+                lightboxCaption.classList.remove('opacity-0');
+            }, 150);
+
+            currentActiveIndex = index;
+        };
+
+        cards.forEach((card, index) => {
+            card.addEventListener('click', () => {
+                if (mode === "x" && Math.abs(lastX - startX) > 6) return;
+
+                updateLightboxContent(index);
+                
+                lightbox.classList.remove('pointer-events-none');
+                lightbox.classList.add('opacity-100');
+            });
+        });
+
+        // Next/Prev click handlers
+        nextBtn?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const nextIndex = (currentActiveIndex + 1) % cards.length;
+            updateLightboxContent(nextIndex);
+        });
+
+        prevBtn?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const prevIndex = (currentActiveIndex - 1 + cards.length) % cards.length;
+            updateLightboxContent(prevIndex);
+        });
+
+        // Keydown processing pipeline framework for Arrows
+        window.addEventListener('keydown', (e) => {
+            if (!lightbox.classList.contains('opacity-100')) return;
+            if (e.key === 'ArrowRight') {
+                const nextIndex = (currentActiveIndex + 1) % cards.length;
+                updateLightboxContent(nextIndex);
+            } else if (e.key === 'ArrowLeft') {
+                const prevIndex = (currentActiveIndex - 1 + cards.length) % cards.length;
+                updateLightboxContent(prevIndex);
+            }
+        });
+    }
 }
 
-// INIT BOTH
+// Lightbox Global Close Pipeline
+function initLightboxClose() {
+    const lightbox = document.getElementById('portfolioLightbox');
+    const lightboxImg = document.getElementById('lightboxImg');
+    const lightboxCaption = document.getElementById('lightboxCaption');
+    const closeBtn = document.getElementById('closeLightbox');
+
+    if (!lightbox || !lightboxImg || !lightboxCaption) return;
+
+    const close = () => {
+        lightboxImg.classList.add('opacity-0', 'scale-95');
+        lightboxCaption.classList.add('opacity-0');
+        lightbox.classList.remove('opacity-100');
+        
+        setTimeout(() => {
+            lightbox.classList.add('pointer-events-none');
+        }, 300);
+    };
+
+    closeBtn?.addEventListener('click', close);
+    lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox || e.target === lightbox.firstElementChild) close();
+    });
+    window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') close();
+    });
+}
+
+// INIT MARQUEES & EVENT MATRIX
 initMarquee("dragTrack1", "marqueeStrip1");
-initMarquee("dragTrack2", "marqueeStrip2");
+initLightboxClose();
 
 document.addEventListener("astro:after-swap", () => {
     initMarquee("dragTrack1", "marqueeStrip1");
-    initMarquee("dragTrack2", "marqueeStrip2");
+    initLightboxClose();
 });
 </script>
 
@@ -202,11 +334,7 @@ document.addEventListener("astro:after-swap", () => {
     cursor: grabbing;
 }
 
-.marquee-strip.reverse {
-    animation-direction: reverse;
-}
-
-/* Prevent images from being dragged/ghosted by the browser */
+/* Prevent image ghosting behaviors while dragging */
 .marquee-viewport img {
     pointer-events: none;
     -webkit-user-drag: none;

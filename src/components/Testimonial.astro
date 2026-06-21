@@ -1,5 +1,5 @@
 ---
-import { Star, ChevronLeft, ChevronRight } from 'lucide-astro';
+import { Star } from 'lucide-astro';
 import { Image } from 'astro:assets';
 
 // Asset Imports
@@ -115,17 +115,9 @@ const testimonials = [
         </div>
 
         <div class="relative group px-4 lg:px-12">
-            
-            <!-- Navigation Buttons -->
-            <button class="swiper-prev absolute left-0 top-1/2 -translate-y-1/2 z-20 bg-white border border-slate-200 hover:bg-secondary/10 hover:text-secondary text-slate-400 p-3 rounded-full transition-all shadow-md hidden lg:flex items-center justify-center">
-                <ChevronLeft size={20} />
-            </button>
-            <button class="swiper-next absolute right-0 top-1/2 -translate-y-1/2 z-20 bg-white border border-slate-200 hover:bg-secondary/10 hover:text-secondary text-slate-400 p-3 rounded-full transition-all shadow-md hidden lg:flex items-center justify-center">
-                <ChevronRight size={20} />
-            </button>
 
             <!-- Swiper Container -->
-            <div class="swiper testimonialSwiper !pb-12">
+            <div class="swiper testimonialSwiper !pb-5">
                 <div class="swiper-wrapper">
                     {testimonials.map((item) => (
                         <div class="swiper-slide !h-auto flex">
