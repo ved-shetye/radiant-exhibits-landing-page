@@ -6,17 +6,17 @@ import bgImg from '../assets/Hero/heroImg.jpeg';
 <section id="contact" class="relative py-8 overflow-hidden flex items-center">
     <!-- Background -->
     <div class="absolute inset-0">
-        <Image src={bgImg} alt="Retail Excellence" class="w-full h-[900px] object-cover" />
-        <div class="absolute inset-0 bg-black/60"></div>
+        <Image src={bgImg} alt="Retail Excellence" class="w-full h-full object-cover object-center absolute inset-0" />
+        <div class="absolute inset-0 bg-black/65"></div>
     </div>
 
-    <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full">
-        <div class="grid lg:grid-cols-[1fr_1.2fr] gap-14 items-center">
+    <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full py-10 lg:py-0">
+        <div class="grid lg:grid-cols-[1fr_1.2fr] gap-10 lg:gap-14 items-center">
 
-            <div data-reveal>
+            <div data-reveal class="text-center lg:text-left">
 
                 <h2
-                    class="text-[36px] md:text-[45px] lg:text-[52px] font-black leading-[0.92] !text-white"
+                    class="text-[33px] md:text-[45px] lg:text-[52px] font-black leading-[0.92] !text-white"
                 >
                     Ready to make your
 
@@ -27,12 +27,12 @@ import bgImg from '../assets/Hero/heroImg.jpeg';
                     out at the next Trade Show?
                 </h2>
 
-                <p class="mt-5 text-[18px] leading-relaxed text-white font-medium">
+                <p class="mt-5 text-[17px] md:text-[18px] leading-relaxed text-white font-medium">
                     Let's build a custom stand strategy together.
                 </p>
 
-                <ul class="mt-4 space-y-3">
-                    <li class="flex items-center gap-3 text-white/90 font-semibold text-[17px]">
+                <ul class="mt-4 space-y-3 inline-block text-left">
+                    <li class="flex items-center gap-3 text-white/90 font-semibold text-[14px] md:text-[16px]">
                         <span class="flex items-center justify-center w-6 h-6 rounded-full bg-[#F97316] shrink-0">
                             <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
@@ -40,7 +40,7 @@ import bgImg from '../assets/Hero/heroImg.jpeg';
                         </span>
                         Free Booth Design in 48 Hours
                     </li>
-                    <li class="flex items-center gap-3 text-white font-semibold text-[17px]">
+                    <li class="flex items-center gap-3 text-white font-semibold text-[14px] md:text-[16px]">
                         <span class="flex items-center justify-center w-6 h-6 rounded-full bg-[#F97316] shrink-0">
                             <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
@@ -48,7 +48,7 @@ import bgImg from '../assets/Hero/heroImg.jpeg';
                         </span>
                         End-to-End Service
                     </li>
-                    <li class="flex items-center gap-3 text-white font-semibold text-[17px]">
+                    <li class="flex items-center gap-3 text-white font-semibold text-[14px] md:text-[16px]">
                         <span class="flex items-center justify-center w-6 h-6 rounded-full bg-[#F97316] shrink-0">
                             <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
@@ -58,7 +58,7 @@ import bgImg from '../assets/Hero/heroImg.jpeg';
                     </li>
                 </ul>
 
-                <div class="flex justify-left mt-7">
+                <div class="flex justify-center lg:justify-start mt-7">
                     <a
                         href="https://radiantexhibits.com/contact-us"
                         class="inline-flex items-center justify-center bg-[#F97316] hover:bg-[#ea6c10] text-white text-[20px] font-extrabold px-10 py-3 rounded-2xl transition-all duration-300"
