@@ -8,7 +8,7 @@ import heroMobile from '../assets/Hero/heroImg.jpeg';
 
 <section
   id="home"
-  class="relative min-h-[85vh] lg:min-h-screen flex items-center pt-28 overflow-hidden bg-white lg:bg-[#020617] font-sans"
+  class="relative min-h-[85vh] lg:min-h-screen flex items-center pt-30 overflow-hidden bg-white lg:bg-[#020617] font-sans"
 >
   <!-- Desktop Background -->
   <div class="absolute inset-0 z-0 hidden lg:block" data-reveal data-delay="0">
@@ -65,14 +65,14 @@ import heroMobile from '../assets/Hero/heroImg.jpeg';
         >
           <a
             href="#contact"
-            class="bg-primary hover:bg-primary/90 text-xl text-white px-10 py-2 md:py-3 rounded-2xl font-black transition-all duration-300 shadow-lg hover:scale-105 active:scale-95"
+            class="bg-primary hover:bg-primary/90 text-xl text-white px-10 py-2.5 md:py-3 rounded-2xl font-black transition-all duration-300 shadow-lg hover:scale-105 active:scale-95"
           >
             Request Quote
           </a>
 
           <a
             href="#contact"
-            class="bg-secondary lg:bg-white hover:opacity-90 lg:hover:bg-gray-100 text-xl text-white lg:text-secondary px-10 py-2 md:py-3 rounded-2xl font-black transition-all duration-300 shadow-md hover:scale-105 active:scale-95"
+            class="bg-secondary lg:bg-white hover:opacity-90 lg:hover:bg-gray-100 text-xl text-white lg:text-secondary px-10 py-2.5 md:py-3 rounded-2xl font-black transition-all duration-300 shadow-md hover:scale-105 active:scale-95"
           >
             Get Free Booth Design
           </a>
@@ -82,14 +82,14 @@ import heroMobile from '../assets/Hero/heroImg.jpeg';
       <!-- Right Form (Takes 5/12 columns, max-w-md makes it narrower and shifts it further right) -->
       <div class="lg:col-span-5 lg:ml-auto w-full max-w-md" data-reveal data-delay="2">
         <div
-          class="bg-[#012234]/95 backdrop-blur-sm rounded-[2rem] p-6 md:p-6 shadow-2xl border border-white/10"
+          class="bg-[#012234]/95 backdrop-blur-sm rounded-[1.5rem] md:rounded-[2rem] p-6 md:p-7 shadow-2xl border border-white/10"
         >
           <h3 class="text-center text-[20px] md:text-[24px] font-bold !text-white mb-2 tracking-wide">
             Request Quote
           </h3>
 
           <!-- CHANGED TO space-y-5 FOR A LONGER FEEL -->
-          <form id="hero-form" class="space-y-5">
+          <form id="hero-form" class="space-y-3">
 
             <!-- Name -->
             <div>
@@ -97,7 +97,7 @@ import heroMobile from '../assets/Hero/heroImg.jpeg';
               <input
                 type="text"
                 placeholder="John Doe"
-                class="w-full h-[46px] rounded-xl bg-[#01324d] border border-white/10 px-4 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-white/30"
+                class="w-full h-[40px] md:h-[46px] rounded-2xl bg-[#01324d] border border-white/10 px-4 text-[15px] text-white placeholder:text-white/40 focus:outline-none focus:border-white/30"
               />
             </div>
 
@@ -108,7 +108,7 @@ import heroMobile from '../assets/Hero/heroImg.jpeg';
                 <input
                   type="border"
                   placeholder="john@example.com"
-                  class="w-full h-[46px] rounded-xl bg-[#01324d] border border-white/10 px-4 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-white/30"
+                  class="w-full h-[40px] md:h-[46px] rounded-2xl bg-[#01324d] border border-white/10 px-4 text-[15px] text-white placeholder:text-white/40 focus:outline-none focus:border-white/30"
                 />
               </div>
               <div>
@@ -116,7 +116,7 @@ import heroMobile from '../assets/Hero/heroImg.jpeg';
                 <input
                   type="tel"
                   placeholder="+1 647-234-2342"
-                  class="w-full h-[46px] rounded-xl bg-[#01324d] border border-white/10 px-4 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-white/30"
+                  class="w-full h-[40px] md:h-[46px] rounded-2xl bg-[#01324d] border border-white/10 px-4 text-[15px] text-white placeholder:text-white/40 focus:outline-none focus:border-white/30"
                 />
               </div>
             </div>
@@ -127,7 +127,7 @@ import heroMobile from '../assets/Hero/heroImg.jpeg';
               <input
                 type="text"
                 placeholder="Doe Pvt. Ltd."
-                class="w-full h-[46px] rounded-xl bg-[#01324d] border border-white/10 px-4 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-white/30"
+                class="w-full h-[40px] md:h-[46px] rounded-2xl bg-[#01324d] border border-white/10 px-4 text-[15px] text-white placeholder:text-white/40 focus:outline-none focus:border-white/30"
               />
             </div>
 
@@ -137,14 +137,14 @@ import heroMobile from '../assets/Hero/heroImg.jpeg';
               <textarea
                 rows="4"
                 placeholder="Requests..."
-                class="w-full rounded-xl bg-[#01324d] border border-white/10 px-4 py-4 text-sm text-white placeholder:text-white/40 resize-none focus:outline-none focus:border-white/30"
+                class="w-full rounded-2xl bg-[#01324d] border border-white/10 px-4 py-3.5 text-[15px] text-white placeholder:text-white/40 resize-none focus:outline-none focus:border-white/30"
               ></textarea>
             </div>
 
             <!-- Button -->
             <button
               type="submit"
-              class="w-full h-[50px] rounded-xl bg-[#F97316] hover:bg-[#ea6c10] text-white text-[16px] font-bold transition-all duration-300"
+              class="w-full h-[45px] rounded-2xl bg-[#F97316] hover:bg-[#ea6c10] text-white text-[16px] font-bold transition-all duration-300 cursor-pointer"
             >
               Submit
             </button>

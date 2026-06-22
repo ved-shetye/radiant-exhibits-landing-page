@@ -240,7 +240,7 @@ html {
 }
 
 @media (max-width: 768px) {
-    .marquee-card { width: 280px; height: 370px; }
+    .marquee-card { width: 280px; height: 300px; }
     .cta-btn { font-size: 1rem; padding: 12px 28px; }
 }
 
