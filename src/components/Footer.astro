@@ -11,14 +11,14 @@ const contactInfo = {
 };
 ---
 
-<footer class="relative bg-[#0077B6] text-white pt-6 pb-6 md:pt-10 md:pb-10 overflow-hidden font-sans">
+<footer class="relative bg-[#0077B6] text-white pt-6 pb-6 md:pt-10 md:pb-6 overflow-hidden font-sans">
   
   <div class="absolute top-0 right-0 w-[550px] h-[550px] bg-white/5 rounded-full blur-[110px] pointer-events-none -translate-y-1/2 translate-x-1/4"></div>
   <div class="absolute bottom-0 left-0 w-[350px] h-[350px] bg-black/10 rounded-full blur-[90px] pointer-events-none translate-y-1/3 -translate-x-1/4"></div>
 
   <div class="relative max-w-7xl mx-auto px-6 lg:px-8 z-10">
 
-    <div class="grid grid-cols-1 md:grid-cols-12 gap-y-6 md:gap-y-12 gap-x-8 lg:gap-x-16 pb-8 md:pb-16 border-b border-white/10">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-y-6 md:gap-y-12 gap-x-8 lg:gap-x-16 pb-4 md:pb-6 border-b border-white/10">
 
       <div class="space-y-3 md:space-y-6 text-center md:text-left md:col-span-5">
         <div class="flex items-center justify-center md:justify-start">
@@ -36,19 +36,22 @@ const contactInfo = {
       </div>
 
       <div class="text-center md:text-left md:col-span-3 lg:pl-6">
-        <h4 class="!text-white font-black text-xs md:text-[18px] uppercase tracking-[0.2em] mb-4 md:mb-6 relative inline-block after:content-[''] after:absolute after:left-1/2 after:md:left-0 after:-bottom-2 after:-translate-x-1/2 after:md:translate-x-0 after:w-6 after:h-[2px] after:bg-[#E76E32]">
+        <h4 class="!text-white font-black text-xs md:text-[22px] uppercase tracking-[0.2em] mb-2 md:mb-3 relative inline-block after:content-[''] after:absolute after:left-1/2 after:md:left-0 after:-bottom-2 after:-translate-x-1/2 after:md:translate-x-0 after:w-6 after:h-[2px] after:bg-[#E76E32]">
           Quick Links
         </h4>
-        <ul class="space-y-2 md:space-y-3.5 flex flex-col items-center md:items-start mt-2">
+        <ul class="space-y-1 md:space-y-1 flex flex-col items-center md:items-start mt-2">
           {[
             { label: 'Home', href: '#home' },
             { label: 'Key Benefits', href: '#features' },
             { label: 'Portfolio', href: '#portfolio' },
             { label: 'Services', href: '#services' },
+            { label: 'Our Process', href: '#process' },
+            { label: 'Testimony', href: '#testimony' },
+            { label: 'FAQ', href: '#faq' },
           ].map(link => (
             <li>
               <a href={link.href}
-                class="relative block text-white/80 hover:text-[#E76E32] transition-colors duration-300 text-[14px] font-bold tracking-wide py-0.5 group">
+                class="relative block text-white/80 hover:text-[#E76E32] transition-colors duration-300 text-[16px] font-bold tracking-wide py-0.5 group">
                 {link.label}
                 <span class="absolute bottom-0 left-0 w-full h-[1.5px] bg-[#E76E32] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
               </a>
@@ -58,29 +61,29 @@ const contactInfo = {
       </div>
 
       <div class="text-center md:text-left md:col-span-4">
-        <h4 class="!text-white font-black text-xs md:text-[18px] uppercase tracking-[0.2em] mb-4 md:mb-6 relative inline-block after:content-[''] after:absolute after:left-1/2 after:md:left-0 after:-bottom-2 after:-translate-x-1/2 after:md:translate-x-0 after:w-6 after:h-[2px] after:bg-[#E76E32]">
+        <h4 class="!text-white font-black text-xs md:text-[22px] uppercase tracking-[0.2em] mb-4 md:mb-6 relative inline-block after:content-[''] after:absolute after:left-1/2 after:md:left-0 after:-bottom-2 after:-translate-x-1/2 after:md:translate-x-0 after:w-6 after:h-[2px] after:bg-[#E76E32]">
           Contact Us
         </h4>
         
         <div class="space-y-3 md:space-y-5 text-[14.5px] text-white/90 font-medium flex flex-col items-center md:items-start mt-2">
 
           <div class="max-w-[280px] md:max-w-none leading-relaxed group">
-            <span class="text-[9px] uppercase tracking-widest text-white/40 font-black block mb-0.5 text-center md:text-left">Office Location</span>
-            <p class="text-white font-bold transition-colors group-hover:text-white/100">
+            <span class="text-[11px] uppercase tracking-widest text-white/40 font-black block mb-0.5 text-center md:text-left">Office Location</span>
+            <p class="text-white font-bold transition-colors group-hover:text-white/100 text-[16px]">
               {contactInfo.address}
             </p>
           </div>
 
           <div class="leading-none">
-            <span class="text-[9px] uppercase tracking-widest text-white/40 font-black block mb-1 text-center md:text-left">Direct Mail</span>
-            <a href={`mailto:${contactInfo.email}`} class="inline-block text-white font-bold hover:text-[#E76E32] transition-colors duration-300 text-[15px]">
+            <span class="text-[11px] uppercase tracking-widest text-white/40 font-black block mb-1 text-center md:text-left">Direct Mail</span>
+            <a href={`mailto:${contactInfo.email}`} class="inline-block text-white font-bold hover:text-[#E76E32] transition-colors duration-300 text-[18px]">
               {contactInfo.email}
             </a>
           </div>
 
           <div class="leading-none">
-            <span class="text-[9px] uppercase tracking-widest text-white/40 font-black block mb-1 text-center md:text-left">Telephone</span>
-            <a href={`tel:${contactInfo.phone.replace(/-/g, '')}`} class="inline-block text-white font-bold hover:text-[#E76E32] transition-colors duration-300 text-[15px]">
+            <span class="text-[11px] uppercase tracking-widest text-white/40 font-black block mb-1 text-center md:text-left">Telephone</span>
+            <a href={`tel:${contactInfo.phone.replace(/-/g, '')}`} class="inline-block text-white font-bold hover:text-[#E76E32] transition-colors duration-300 text-[18px]">
               {contactInfo.phone}
             </a>
           </div>
@@ -90,10 +93,10 @@ const contactInfo = {
 
     </div>
 
-    <div class="pt-5 md:pt-8 flex flex-col sm:flex-row justify-between items-center gap-3 md:gap-4 text-[10px] md:text-xs text-white/40 uppercase tracking-[0.2em] font-bold text-center">
+    <div class="pt-5 md:pt-6 flex flex-col sm:flex-row justify-between items-center gap-3 md:gap-4 text-[10px] md:text-xs text-white/40 uppercase tracking-[0.2em] font-bold text-center">
       <p class="tracking-widest">© 2026 Radiant Exhibits. All Rights Reserved.</p>
 
-      <div class="flex items-center gap-6">
+      <div class="flex items-center gap-5">
         <a href={contactInfo.termsUrl} class="hover:text-black/70 transition-colors duration-300">
           Terms & Conditions
         </a>
