@@ -35,102 +35,100 @@ const logos = [
     </h2>
   </div>
 
-  <!-- Using native horizontal scroll container (scrollbars hidden via CSS) -->
-  <div class="flex overflow-x-auto py-1 cursor-grab active:cursor-grabbing ticker-container scroll-smooth-none" data-reveal data-delay="2">
-    <div class="flex gap-8 logo-ticker items-center">
-      {/* We render two sets to handle seamless looping via scroll positioning */}
+  <div class="w-full overflow-hidden ticker-wrapper cursor-grab active:cursor-grabbing">
+    <div class="flex gap-8 ticker-track items-center py-4">
+      
       {[...logos, ...logos].map((logo) => (
-        <div
-          class="bg-white px-8 py-6 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-center min-w-[220px] h-28 hover:shadow-md hover:border-secondary/20 transition-all duration-300 flex-shrink-0 pointer-events-none"
-        >
+        <div class="bg-white px-8 py-6 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-center min-w-[220px] h-28 flex-shrink-0 pointer-events-none">
           <Image
             src={logo.src}
             alt={logo.alt}
-            class="max-h-18 w-auto object-contain transition-all duration-300"
+            class="max-h-18 w-auto object-contain"
             loading="lazy"
           />
         </div>
       ))}
+      
     </div>
   </div>
 </section>
 
 <script is:inline>
-  const container = document.querySelector('.ticker-container');
+  const wrapper = document.querySelector('.ticker-wrapper');
+  const track = document.querySelector('.ticker-track');
   
-  if (container) {
-    let isDown = false;
-    let startX;
-    let scrollLeft;
-    let speed = 1; // Pixels per frame auto-scroll speed
-    let animationFrameId;
+  if (wrapper && track) {
+    let currentX = 0;
+    const speed = 1; // Pixels per frame auto-scroll speed
+    let isDragging = false;
+    let startX = 0;
+    let dragX = 0;
 
-    // 1. Auto Scroll Loop Function
-    function step() {
-      if (!isDown) {
-        container.scrollLeft += speed;
-        
-        // Loop back seamlessly when reaching halfway through the duplicate contents
-        const maxScroll = container.scrollWidth / 2;
-        if (container.scrollLeft >= maxScroll) {
-          container.scrollLeft -= maxScroll;
-        } else if (container.scrollLeft <= 0) {
-          container.scrollLeft += maxScroll;
-        }
+    function updateTicker() {
+      // 1. If not dragging, apply the regular auto-scroll
+      if (!isDragging) {
+        currentX -= speed;
       }
-      animationFrameId = requestAnimationFrame(step);
+
+      // Calculate the point where the first set ends to snap back seamlessly
+      // We divide by 2 because the track contains two full copies of the array
+      const halfWidth = track.scrollWidth / 2;
+
+      // Bound checks for infinite seamless looping
+      if (Math.abs(currentX) >= halfWidth) {
+        currentX += halfWidth;
+      } else if (currentX > 0) {
+        currentX -= halfWidth;
+      }
+
+      // Move via CSS transform instead of scroll properties to prevent scrollbars completely
+      track.style.transform = `translate3d(${currentX}px, 0, 0)`;
+      requestAnimationFrame(updateTicker);
     }
 
-    // Initialize Auto-scroll loop
-    animationFrameId = requestAnimationFrame(step);
+    // Start loop
+    requestAnimationFrame(updateTicker);
 
-    // 2. Drag Interaction Listeners
-    container.addEventListener('mousedown', (e) => {
-      isDown = true;
-      startX = e.pageX - container.offsetLeft;
-      scrollLeft = container.scrollLeft;
-    });
+    // 2. Manual Mouse & Touch Events for Dragging
+    const startDrag = (e) => {
+      isDragging = true;
+      startX = (e.pageX || e.touches[0].pageX) - currentX;
+    };
 
-    container.addEventListener('mouseleave', () => {
-      isDown = false;
-    });
-
-    container.addEventListener('mouseup', () => {
-      isDown = false;
-    });
-
-    container.addEventListener('mousemove', (e) => {
-      if (!isDown) return;
+    const moveDrag = (e) => {
+      if (!isDragging) return;
       e.preventDefault();
-      
-      const x = e.pageX - container.offsetLeft;
-      const walk = (x - startX) * 1.5; // Drag sensitivity modifier
-      container.scrollLeft = scrollLeft - walk;
+      const x = e.pageX || e.touches[0].pageX;
+      currentX = x - startX;
+    };
 
-      // Wrap around bounds check during manual drag
-      const maxScroll = container.scrollWidth / 2;
-      if (container.scrollLeft >= maxScroll) {
-        container.scrollLeft -= maxScroll;
-        startX = x - (scrollLeft - container.scrollLeft); // Reset baseline anchor points
-      } else if (container.scrollLeft <= 0) {
-        container.scrollLeft += maxScroll;
-        startX = x - (scrollLeft - container.scrollLeft);
-      }
-    });
+    const stopDrag = () => {
+      isDragging = false;
+    };
+
+    // Mouse Listeners
+    wrapper.addEventListener('mousedown', startDrag);
+    window.addEventListener('mousemove', moveDrag);
+    window.addEventListener('mouseup', stopDrag);
+    wrapper.addEventListener('mouseleave', stopDrag);
+
+    // Touch Listeners (Mobile compatibility)
+    wrapper.addEventListener('touchstart', startDrag);
+    window.addEventListener('touchmove', moveDrag, { passive: false });
+    window.addEventListener('touchend', stopDrag);
   }
 </script>
 
 <style>
-  /* Hide native scrollbars cleanly across browsers */
-  .ticker-container {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
-  }
-  .ticker-container::-webkit-scrollbar {
-    display: none; /* Chrome, Safari and Opera */
+  .ticker-wrapper {
+    position: relative;
+    width: 100%;
+    touch-action: pan-y; /* Allows normal vertical page scrolling on mobile */
   }
 
-  .logo-ticker {
-    white-space: nowrap;
+  .ticker-track {
+    display: flex;
+    width: max-content;
+    will-change: transform;
   }
 </style>
