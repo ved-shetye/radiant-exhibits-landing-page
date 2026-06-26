@@ -63,8 +63,8 @@ const features = [
         <div class="grid md:grid-cols-2 gap-x-16 gap-y-8 px-4 md:px-8">
             {features.map((f, i) => (
                 <div class="flex items-start space-x-6" data-reveal data-delay={i + 2}>
-                    <div class="flex-shrink-0 w-16 h-16 border-2 border-secondary/20 rounded-2xl flex items-center justify-center hover:bg-secondary hover:text-white transition-all duration-300 group">
-                        <f.Icon class="w-8 h-8 text-secondary group-hover:text-white transition-colors duration-300" />
+                    <div class="flex-shrink-0 w-16 h-16 border-2 border-secondary/20 rounded-2xl flex items-center justify-center">
+                        <f.Icon class="w-8 h-8 text-secondary transition-colors duration-300" />
                     </div>
                     <div class="space-y-2">
                         <h3 class="text-[18px] md:text-[22px] font-black text-secondary leading-snug">{f.title}</h3>

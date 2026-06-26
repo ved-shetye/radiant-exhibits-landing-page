@@ -5,74 +5,644 @@ import hybridImg from '../assets/Displays/1.webp';
 import modularImg from '../assets/Displays/2.webp';
 import rentalImg from '../assets/Displays/3.webp';
 
+import hybridImgMobile from '../assets/Displays/1.webp';
+import modularImgMobile from '../assets/Displays/2.webp';
+import rentalImgMobile from '../assets/Displays/3.webp';
+// Dynamically import all images in the respective Gallery subfolders
+const customGalleryImports = import.meta.glob('/src/assets/Displays/Custom/Gallery/*.{png,jpg,jpeg,webp,PNG,JPG,JPEG,WEBP}', { eager: true });
+const modularGalleryImports = import.meta.glob('/src/assets/Displays/Modular/Gallery/*.{png,jpg,jpeg,webp,PNG,JPG,JPEG,WEBP}', { eager: true });
+const rentalGalleryImports = import.meta.glob('/src/assets/Displays/Rental/Gallery/*.{png,jpg,jpeg,webp,PNG,JPG,JPEG,WEBP}', { eager: true });
+
+const customGallery = Object.entries(customGalleryImports)
+  .sort(([a], [b]) => a.localeCompare(b, undefined, { numeric: true }))
+  .map(([, m]: any) => m.default);
+
+const modularGallery = Object.entries(modularGalleryImports)
+  .sort(([a], [b]) => a.localeCompare(b, undefined, { numeric: true }))
+  .map(([, m]: any) => m.default);
+
+const rentalGallery = Object.entries(rentalGalleryImports)
+  .sort(([a], [b]) => a.localeCompare(b, undefined, { numeric: true }))
+  .map(([, m]: any) => m.default);
+
 const categories = [
-    {
-        title: "Custom Hybrid Booths",
-        img: hybridImg,
-        delay: "1"
-    },
-    {
-        title: "Modular Booths",
-        img: modularImg,
-        delay: "2"
-    },
-    {
-        title: "Rental Options",
-        img: rentalImg,
-        delay: "3"
-    }
+  {
+    title: "CUSTOM HYBRID BOOTHS",
+    img: hybridImg,
+    imgMobile: hybridImgMobile,
+    delay: "1",
+    gallery: customGallery
+  },
+  {
+    title: "MODULAR BOOTHS",
+    img: modularImg,
+    imgMobile: modularImgMobile,
+    delay: "2",
+    gallery: modularGallery
+  },
+  {
+    title: "RENTAL OPTIONS",
+    img: rentalImg,
+    imgMobile: rentalImgMobile,
+    delay: "3",
+    gallery: rentalGallery
+  }
 ];
 ---
 
-<section id="process" class="py-10 bg-secondary/10 overflow-hidden">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <!-- Header Section -->
-        <div class="text-center mb-8" data-reveal data-delay="1">
-            <h4 class="flex items-center justify-center uppercase tracking-[0.2em] text-[13px] md:text-[18px] font-black !text-black mb-2">
-                <span class="flex-grow border-t-2 border-slate-900 mr-4 max-w-[60px]"></span>
-                    Our Exhibit Options 
-                <span class="flex-grow border-t-2 border-slate-900 ml-4 max-w-[60px]"></span>
-            </h4>
-            <h2 class="text-[26px] md:text-[44px] font-[900] text-secondary leading-tight">
-                Custom Trade Show Booths
-            </h2>
-        </div>
-        
-        <!-- Standardized Grid following the reference image layout -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {categories.map((item) => (
-                <div 
-                    class="group flex flex-col items-center space-y-6" 
-                    data-reveal 
-                    data-delay={item.delay}
-                >
-                    <!-- Image Container: Matching the 2rem rounded corners from image_d556b5.jpg -->
-                    <div class="w-full aspect-[4/3] rounded-[2rem] overflow-hidden shadow-2xl transition-all duration-500 group-hover:shadow-primary/20">
-                        <Image 
-                            src={item.img} 
-                            alt={item.title}
-                            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                        />
-                    </div>
-
-                    <!-- Label: Using your Primary Orange color for visibility on Dark background -->
-                    <h3 class="text-primary text-center text-lg md:text-xl font-black tracking-wide uppercase">
-                        {item.title}
-                    </h3>
-                </div>
-            ))}
-        </div>
+<section id="exhibit" class="py-8 bg-secondary/10 overflow-hidden">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Header Section -->
+    <div class="text-center mb-12" data-reveal data-delay="1">
+      <h4 class="flex items-center justify-center uppercase tracking-[0.2em] text-[13px] md:text-[18px] font-black !text-black mb-1">
+        <span class="flex-grow border-t-2 border-slate-900 mr-4 max-w-[60px]"></span>
+        Our Exhibit Options
+        <span class="flex-grow border-t-2 border-slate-900 ml-4 max-w-[60px]"></span>
+      </h4>
+      <h2 class="text-[28px] md:text-[44px] font-[900] text-secondary leading-tight">
+        Custom Trade Show Booths
+      </h2>
     </div>
+
+    <!-- =========================
+         DESKTOP / TABLET GRID ONLY
+    ========================== -->
+    <div class="hidden md:grid grid-cols-3 gap-6">
+      {categories.map((item, index) => (
+        <div
+          class="group flex flex-col items-center space-y-4"
+          data-reveal
+          data-delay={item.delay}
+        >
+          <button
+            type="button"
+            class="w-full max-w-[380px] aspect-[334/290] rounded-[2rem] overflow-hidden shadow-2xl transition-all duration-500 group-hover:shadow-primary/20 exhibit-open-btn bg-white"
+            data-gallery-index={index}
+            data-gallery-title={item.title}
+            data-gallery-images={JSON.stringify(item.gallery.map((img) => img?.src).filter(Boolean))}
+            aria-label={`Open ${item.title} gallery`}
+          >
+            <img
+              src={item.img.src}
+              alt={item.title}
+              class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+              loading="lazy"
+            />
+          </button>
+
+          <h3 class="text-primary text-center text-lg md:text-[22px] font-black tracking-wide uppercase">
+            {item.title}
+          </h3>
+        </div>
+      ))}
+    </div>
+
+    <!-- =========================
+         MOBILE SINGLE-CARD SLIDER ONLY
+    ========================== -->
+    <div class="md:hidden exhibit-mobile-wrap" data-reveal data-delay="2">
+      <button
+        class="exhibit-mobile-arrow exhibit-mobile-prev"
+        id="exhibitPrev"
+        aria-label="Previous exhibit"
+        type="button"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-[18px] h-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.4">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+        </svg>
+      </button>
+
+      <div class="exhibit-mobile-viewport" id="exhibitViewport">
+        <div class="exhibit-mobile-track">
+          {categories.map((item, index) => (
+            <div class="exhibit-mobile-slide">
+              <div class="group flex flex-col items-center">
+                <button
+                  type="button"
+                  class="w-[90%] max-w-[320px] aspect-[4/5] rounded-[2rem] overflow-hidden bg-white exhibit-open-btn"
+                  data-gallery-index={index}
+                  data-gallery-title={item.title}
+                  data-gallery-images={JSON.stringify(item.gallery.map((img) => img?.src).filter(Boolean))}
+                  aria-label={`Open ${item.title} gallery`}
+                >
+                  <img
+                    src={item.imgMobile.src}
+                    alt={item.title}
+                    class="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                </button>
+
+                <h3 class="text-primary text-center text-lg font-black tracking-wide uppercase mt-4 leading-tight px-2">
+                  {item.title}
+                </h3>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <button
+        class="exhibit-mobile-arrow exhibit-mobile-next"
+        id="exhibitNext"
+        aria-label="Next exhibit"
+        type="button"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-[18px] h-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.4">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- CTA Button -->
+    <div class="flex justify-center mt-8" data-reveal-left data-delay="6">
+      <a href="#contact" class="bg-primary hover:bg-primary/90 text-white px-12 py-3 rounded-2xl text-lg md:text-xl font-bold transition-all shadow-xl shadow-primary/25 hover:scale-105 active:scale-95">
+        Get Instant Quote
+      </a>
+    </div>
+  </div>
+
+  <!-- =========================
+       MODAL GALLERY
+  ========================== -->
+  <div id="exhibitModal" class="exhibit-modal" aria-hidden="true">
+    <div class="exhibit-modal-backdrop" data-close-modal></div>
+
+    <div class="exhibit-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="exhibitModalTitle">
+      <button type="button" class="exhibit-modal-close" id="exhibitModalClose" aria-label="Close gallery">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:w-6 md:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+
+      <div class="exhibit-modal-inner">
+        <button type="button" class="exhibit-modal-nav exhibit-modal-prev" id="exhibitModalPrev" aria-label="Previous gallery image">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-[18px] h-[18px] md:w-5 md:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+
+        <div class="exhibit-modal-content">
+          <div class="exhibit-modal-media">
+            <img id="exhibitModalImage" src="" alt="" class="exhibit-modal-image" />
+          </div>
+
+          <div class="exhibit-modal-caption">
+            <h3 id="exhibitModalTitle" class="exhibit-modal-title"></h3>
+            <p class="exhibit-modal-count" id="exhibitModalCount"></p>
+          </div>
+        </div>
+
+        <button type="button" class="exhibit-modal-nav exhibit-modal-next" id="exhibitModalNext" aria-label="Next gallery image">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-[18px] h-[18px] md:w-5 md:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
 </section>
 
 <style>
-    /* Section specific grounding */
-    section {
-        font-family: var(--font-sans);
+  section {
+    font-family: var(--font-sans);
+  }
+
+  .shadow-2xl {
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  }
+
+  .exhibit-open-btn {
+    display: block;
+    cursor: pointer;
+  }
+
+  /* =========================
+     MOBILE SINGLE SLIDER
+  ========================= */
+  .exhibit-mobile-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .exhibit-mobile-viewport {
+    width: 100%;
+    max-width: 320px;
+    overflow: hidden;
+  }
+
+  .exhibit-mobile-track {
+    display: flex;
+    transition: transform 0.45s ease;
+    will-change: transform;
+  }
+
+  .exhibit-mobile-slide {
+    flex: 0 0 100%;
+    width: 100%;
+  }
+
+  .exhibit-mobile-arrow {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.98);
+    border: 1px solid #e2e8f0;
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.14);
+    transition: all 0.25s ease;
+    backdrop-filter: blur(8px);
+  }
+
+  .exhibit-mobile-arrow:hover {
+    background: rgba(0, 116, 178, 0.08);
+    color: #0074B2;
+    border-color: rgba(0, 116, 178, 0.2);
+    transform: scale(1.06);
+  }
+
+  .exhibit-mobile-arrow:active {
+    transform: scale(0.96);
+  }
+
+  .exhibit-mobile-arrow:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  /* Remove heavy shadow from mobile image */
+  .exhibit-mobile-slide .exhibit-open-btn {
+    box-shadow: none !important;
+  }
+
+  /* IMPORTANT FIX:
+     Force mobile slider hidden on desktop even if custom CSS applies display:flex */
+  @media (min-width: 768px) {
+    .exhibit-mobile-wrap {
+      display: none !important;
+    }
+  }
+
+  /* =========================
+     MODAL
+  ========================= */
+  .exhibit-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.28s ease, visibility 0.28s ease;
+  }
+
+  .exhibit-modal.is-open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .exhibit-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(2, 8, 23, 0.82);
+    backdrop-filter: blur(6px);
+  }
+
+  .exhibit-modal-dialog {
+    position: relative;
+    z-index: 2;
+    width: min(1100px, calc(100vw - 24px));
+    margin: 3vh auto;
+    height: min(92vh, 920px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .exhibit-modal-inner {
+    width: 100%;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .exhibit-modal-content {
+    min-width: 0;
+  }
+
+  .exhibit-modal-media {
+    width: 100%;
+    background: #fff;
+    border-radius: 28px;
+    overflow: hidden;
+    box-shadow: 0 24px 60px rgba(15, 23, 42, 0.28);
+  }
+
+  .exhibit-modal-image {
+    width: 100%;
+    height: min(72vh, 760px);
+    object-fit: contain;
+    display: block;
+    background: #fff;
+    transition: opacity 0.2s ease-in-out;
+    opacity: 1;
+  }
+
+  .exhibit-modal-image.is-loading {
+    opacity: 0;
+  }
+
+  .exhibit-modal-caption {
+    padding-top: 14px;
+    text-align: center;
+  }
+
+  .exhibit-modal-title {
+    color: #ffffff;
+    font-size: clamp(1rem, 1.5vw, 1.35rem);
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    line-height: 1.3;
+  }
+
+  .exhibit-modal-count {
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 0.95rem;
+    margin-top: 6px;
+    font-weight: 600;
+  }
+
+  .exhibit-modal-nav,
+  .exhibit-modal-close {
+    width: 46px;
+    height: 46px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(8px);
+    transition: transform 0.2s ease, background 0.2s ease, opacity 0.2s ease;
+    box-shadow: 0 10px 28px rgba(15, 23, 42, 0.22);
+  }
+
+  .exhibit-modal-nav:hover,
+  .exhibit-modal-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.05);
+  }
+
+  .exhibit-modal-nav:active,
+  .exhibit-modal-close:active {
+    transform: scale(0.97);
+  }
+
+  .exhibit-modal-nav:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .exhibit-modal-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 3;
+  }
+
+  @media (max-width: 767px) {
+    .exhibit-mobile-wrap {
+      display: flex !important;
+      gap: 8px;
     }
 
-    /* Standardizing the shadow depth for that premium look */
-    .shadow-2xl {
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    .exhibit-mobile-arrow {
+      width: 36px;
+      height: 36px;
     }
+
+    .exhibit-mobile-viewport {
+      max-width: 290px;
+    }
+
+    .exhibit-modal-dialog {
+      width: calc(100vw - 16px);
+      margin: 2vh auto;
+      height: 96vh;
+    }
+
+    .exhibit-modal-inner {
+      grid-template-columns: 40px minmax(0, 1fr) 40px;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .exhibit-modal-nav,
+    .exhibit-modal-close {
+      width: 40px;
+      height: 40px;
+    }
+
+    .exhibit-modal-media {
+      border-radius: 20px;
+    }
+
+    .exhibit-modal-image {
+      height: 58vh;
+    }
+
+    .exhibit-modal-caption {
+      padding-top: 12px;
+    }
+
+    .exhibit-modal-title {
+      font-size: 0.95rem;
+    }
+
+    .exhibit-modal-count {
+      font-size: 0.85rem;
+    }
+  }
 </style>
+
+<script>
+  function initExhibitSlider() {
+    const mobileWrap = document.querySelector('.exhibit-mobile-wrap');
+    if (!mobileWrap || mobileWrap.dataset.ready === 'true') return;
+
+    const viewport = document.getElementById('exhibitViewport');
+    const track = viewport?.querySelector('.exhibit-mobile-track');
+    const slides = track?.querySelectorAll('.exhibit-mobile-slide');
+    const prevBtn = document.getElementById('exhibitPrev');
+    const nextBtn = document.getElementById('exhibitNext');
+
+    if (!viewport || !track || !slides?.length || !prevBtn || !nextBtn) return;
+    mobileWrap.dataset.ready = 'true';
+
+    let currentIndex = 0;
+    const totalSlides = slides.length;
+
+    function updateSlider() {
+      const slideWidth = viewport.clientWidth;
+      track.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
+
+      // Cyclic mode: buttons are never disabled
+      prevBtn.disabled = false;
+      nextBtn.disabled = false;
+    }
+
+    prevBtn.addEventListener('click', () => {
+      currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+      updateSlider();
+    });
+
+    nextBtn.addEventListener('click', () => {
+      currentIndex = (currentIndex + 1) % totalSlides;
+      updateSlider();
+    });
+
+    window.addEventListener('resize', updateSlider);
+    updateSlider();
+  }
+
+  function initExhibitModal() {
+    const modal = document.getElementById('exhibitModal');
+    if (!modal || modal.dataset.ready === 'true') return;
+    modal.dataset.ready = 'true';
+
+    const modalImg = document.getElementById('exhibitModalImage');
+    const modalTitle = document.getElementById('exhibitModalTitle');
+    const modalCount = document.getElementById('exhibitModalCount');
+    const prevBtn = document.getElementById('exhibitModalPrev');
+    const nextBtn = document.getElementById('exhibitModalNext');
+    const closeBtn = document.getElementById('exhibitModalClose');
+    const closeTargets = modal.querySelectorAll('[data-close-modal]');
+    const openBtns = document.querySelectorAll('.exhibit-open-btn');
+
+    let activeGallery = [];
+    let activeTitle = '';
+    let activeIndex = 0;
+
+    function updateModal() {
+      if (!activeGallery.length) return;
+
+      modalImg.classList.add('is-loading');
+
+      const tempImg = new Image();
+      const currentIdx = activeIndex;
+
+      tempImg.onload = () => {
+        if (currentIdx !== activeIndex) return;
+        modalImg.src = tempImg.src;
+        modalImg.alt = `${activeTitle} gallery image ${activeIndex + 1}`;
+        modalTitle.textContent = activeTitle;
+        modalCount.textContent = `${activeIndex + 1} / ${activeGallery.length}`;
+        modalImg.classList.remove('is-loading');
+      };
+
+      tempImg.onerror = () => {
+        if (currentIdx !== activeIndex) return;
+        modalImg.classList.remove('is-loading');
+      };
+
+      tempImg.src = activeGallery[activeIndex];
+
+      // Preload next and previous images in the background
+      const nextIdx = (activeIndex + 1) % activeGallery.length;
+      const prevIdx = (activeIndex - 1 + activeGallery.length) % activeGallery.length;
+      new Image().src = activeGallery[nextIdx];
+      new Image().src = activeGallery[prevIdx];
+
+      prevBtn.disabled = false;
+      nextBtn.disabled = false;
+    }
+
+    function openModal(images, title, startIndex = 0) {
+      activeGallery = images;
+      activeTitle = title;
+      activeIndex = startIndex;
+
+      // Preload all images in the active gallery immediately
+      images.forEach((src) => {
+        new Image().src = src;
+      });
+
+      updateModal();
+      modal.classList.add('is-open');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      modal.classList.remove('is-open');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+
+    openBtns.forEach((btn) => {
+      if (btn.dataset.bound === 'true') return;
+      btn.dataset.bound = 'true';
+
+      btn.addEventListener('click', () => {
+        try {
+          const images = JSON.parse(btn.dataset.galleryImages || '[]');
+          const title = btn.dataset.galleryTitle || 'Gallery';
+          openModal(images, title, 0);
+        } catch (err) {
+          console.error('Failed to open exhibit gallery', err);
+        }
+      });
+    });
+
+    prevBtn.addEventListener('click', () => {
+      if (activeGallery.length > 0) {
+        activeIndex = (activeIndex - 1 + activeGallery.length) % activeGallery.length;
+        updateModal();
+      }
+    });
+
+    nextBtn.addEventListener('click', () => {
+      if (activeGallery.length > 0) {
+        activeIndex = (activeIndex + 1) % activeGallery.length;
+        updateModal();
+      }
+    });
+
+    closeBtn.addEventListener('click', closeModal);
+    closeTargets.forEach((el) => el.addEventListener('click', closeModal));
+
+    document.addEventListener('keydown', (e) => {
+      if (!modal.classList.contains('is-open')) return;
+
+      if (e.key === 'Escape') closeModal();
+      if (e.key === 'ArrowLeft' && activeGallery.length > 0) {
+        activeIndex = (activeIndex - 1 + activeGallery.length) % activeGallery.length;
+        updateModal();
+      }
+      if (e.key === 'ArrowRight' && activeGallery.length > 0) {
+        activeIndex = (activeIndex + 1) % activeGallery.length;
+        updateModal();
+      }
+    });
+  }
+
+  function initExhibitSection() {
+    initExhibitSlider();
+    initExhibitModal();
+  }
+
+  initExhibitSection();
+  document.addEventListener('astro:after-swap', initExhibitSection);
+</script>

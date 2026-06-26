@@ -2,7 +2,7 @@
 import { Image } from 'astro:assets';
 
 const imageModules = import.meta.glob(
-  '../assets/PortfolioImages/*.{jpg,jpeg,png,JPG,JPEG,PNG}',
+  '/src/assets/PortfolioImages/*.{jpg,jpeg,png,JPG,JPEG,PNG}',
   { eager: true }
 );
 
@@ -10,14 +10,13 @@ const imageModules = import.meta.glob(
 const slides = Object.entries(imageModules)
   .sort(([a], [b]) => a.localeCompare(b))
   .map(([path, mod]) => {
-    // Extract file name without extension (e.g., "../assets/PortfolioImages/Harley-Davidson.jpg" -> "Harley Davidson")
+    // Extract file name without extension
     const fileName = path.split('/').pop()?.split('.').shift() || '';
-    const cleanLabel = fileName.replace(/[-_]/g, ' ');
+    const cleanLabel = fileName.replace(/_/g, '|').trim();
 
     return {
       src: (mod as any).default,
-      // Default label if specific metadata isn't present in filename
-      label: cleanLabel ? `${cleanLabel} | Exhibition Display` : "Radiant Exhibits Showcase Booth"
+      label: cleanLabel ? cleanLabel : "Radiant Exhibits Showcase Booth"
     };
   });
 ---
@@ -73,7 +72,7 @@ const slides = Object.entries(imageModules)
     </button>
 
     <div id="lightboxCounter" class="absolute top-6 left-6 text-white/60 text-sm font-semibold tracking-wider bg-white/5 border border-white/10 px-4 py-2 rounded-full z-10">
-        <span id="lightboxIndex">1</span> / <span id="lightboxTotal">8</span>
+        <span id="lightboxIndex">1</span> / <span id="lightboxTotal">{slides.length}</span>
     </div>
 
     <button id="prevLightbox" class="absolute left-4 top-1/2 -translate-y-1/2 text-white/80 hover:text-white bg-white/10 hover:bg-[#1e3a5f]/60 border border-white/10 hover:border-[#3b6ea5]/50 p-3.5 rounded-xl transition-all duration-200 select-none z-10 hover:scale-105">
@@ -217,41 +216,112 @@ function initMarquee(viewportId, stripId) {
 
     // Lightbox & Navigation Processing Element Handles
     const lightbox = document.getElementById('portfolioLightbox');
-    const lightboxImg = document.getElementById('lightboxImg') as HTMLImageElement;
+    const lightboxImg = document.getElementById('lightboxImg');
     const lightboxCaption = document.getElementById('lightboxCaption');
     const nextBtn = document.getElementById('nextLightbox');
     const prevBtn = document.getElementById('prevLightbox');
+    const lightboxIndex = document.getElementById('lightboxIndex');
+    const lightboxTotal = document.getElementById('lightboxTotal');
 
     if (lightbox && lightboxImg && lightboxCaption) {
         const cards = Array.from(strip.querySelectorAll('.marquee-card'));
-        
-        const updateLightboxContent = (index: number) => {
+        const originalSlidesCount = cards.length / 2;
+
+        if (lightboxTotal) {
+            lightboxTotal.textContent = String(originalSlidesCount);
+        }
+
+        // =========================
+        // LIGHTBOX PERFORMANCE FIX
+        // =========================
+        const preloadedImages = new Set();
+
+        const preloadImage = (src) => {
+            if (!src || preloadedImages.has(src)) return;
+            const img = new window.Image();
+            img.decoding = 'async';
+            img.src = src;
+            preloadedImages.add(src);
+        };
+
+        const preloadAllLightboxImages = () => {
+            cards.slice(0, originalSlidesCount).forEach((card) => {
+                const src = card.getAttribute('data-src') || '';
+                preloadImage(src);
+            });
+        };
+
+        const preloadAdjacentImages = (index) => {
+            const nextIndex = (index + 1) % cards.length;
+            const prevIndex = (index - 1 + cards.length) % cards.length;
+
+            const nextSrc = cards[nextIndex]?.getAttribute('data-src') || '';
+            const prevSrc = cards[prevIndex]?.getAttribute('data-src') || '';
+
+            preloadImage(nextSrc);
+            preloadImage(prevSrc);
+        };
+
+        if (document.readyState === 'complete') {
+            preloadAllLightboxImages();
+        } else {
+            window.addEventListener('load', preloadAllLightboxImages, { once: true });
+        }
+
+        const updateLightboxContent = (index, immediate = false) => {
             const card = cards[index];
             if (!card) return;
 
             const targetSrc = card.getAttribute('data-src') || '';
             const targetLabel = card.getAttribute('data-label') || '';
 
-            // Handle cross-fade smooth transform updates
+            currentActiveIndex = index;
+
+            if (lightboxIndex) {
+                lightboxIndex.textContent = String((index % originalSlidesCount) + 1);
+            }
+
+            preloadAdjacentImages(index);
+
+            const applyContent = () => {
+                lightboxImg.src = targetSrc;
+                lightboxImg.alt = targetLabel || 'Expanded Portfolio Exhibit';
+                lightboxCaption.textContent = targetLabel;
+
+                requestAnimationFrame(() => {
+                    lightboxImg.classList.remove('opacity-0', 'scale-95');
+                    lightboxCaption.classList.remove('opacity-0');
+                });
+            };
+
+            if (immediate) {
+                applyContent();
+                return;
+            }
+
+            // fade out current content
             lightboxImg.classList.add('opacity-0', 'scale-95');
             lightboxCaption.classList.add('opacity-0');
 
-            setTimeout(() => {
-                lightboxImg.src = targetSrc;
-                lightboxCaption.textContent = targetLabel;
-                lightboxImg.classList.remove('opacity-0', 'scale-95');
-                lightboxCaption.classList.remove('opacity-0');
-            }, 150);
+            // wait until the next image is ready before swapping
+            const tempImg = new window.Image();
+            tempImg.decoding = 'async';
+            tempImg.src = targetSrc;
 
-            currentActiveIndex = index;
+            if (tempImg.complete) {
+                applyContent();
+            } else {
+                tempImg.onload = applyContent;
+                tempImg.onerror = applyContent;
+            }
         };
 
         cards.forEach((card, index) => {
             card.addEventListener('click', () => {
                 if (mode === "x" && Math.abs(lastX - startX) > 6) return;
 
-                updateLightboxContent(index);
-                
+                updateLightboxContent(index, true);
+
                 lightbox.classList.remove('pointer-events-none');
                 lightbox.classList.add('opacity-100');
             });
