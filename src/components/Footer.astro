@@ -3,7 +3,7 @@ import { Image } from 'astro:assets';
 import logoImg from '../assets/logo.png';
 
 const contactInfo = {
-  email: "Sales@radiantexhibits.com",
+  email: "sales@radiantexhibits.com",
   phone: "416-412-0500",
   address: "150 Milner Ave Unit #19, Toronto, ON M1S 3R3",
   tagline: "#1 Custom Trade Show Booth Exhibits in Canada",
@@ -41,19 +41,15 @@ const contactInfo = {
         </h4>
         <ul class="space-y-1 md:space-y-1 flex flex-col items-center md:items-start mt-2">
           {[
-            { label: 'Home', href: '#home' },
-            { label: 'Key Benefits', href: '#features' },
-            { label: 'Portfolio', href: '#portfolio' },
-            { label: 'Services', href: '#services' },
-            { label: 'Our Process', href: '#process' },
             { label: 'Testimony', href: '#testimony' },
+            { label: 'Our Process', href: '#process' },
             { label: 'FAQ', href: '#faq' },
           ].map(link => (
             <li>
               <a href={link.href}
-                class="relative block text-white/80 hover:text-[#E76E32] transition-colors duration-300 text-[16px] font-bold tracking-wide py-0.5 group">
+                class="relative block text-white/80 hover:text-[#ffdcb8] transition-colors duration-300 text-[16px] font-bold tracking-wide py-0.5 group">
                 {link.label}
-                <span class="absolute bottom-0 left-0 w-full h-[1.5px] bg-[#E76E32] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+                <span class="absolute bottom-0 left-0 w-full h-[1.5px] bg-[#ffdcb8] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
               </a>
             </li>
           ))}
@@ -76,14 +72,14 @@ const contactInfo = {
 
           <div class="leading-none">
             <span class="text-[11px] uppercase tracking-widest text-white/40 font-black block mb-1 text-center md:text-left">Direct Mail</span>
-            <a href={`mailto:${contactInfo.email}`} class="inline-block text-white font-bold hover:text-[#E76E32] transition-colors duration-300 text-[18px]">
+            <a href={`mailto:${contactInfo.email}`} class="inline-block text-white font-bold hover:text-[#ffdcb8] transition-colors duration-300 text-[18px]">
               {contactInfo.email}
             </a>
           </div>
 
           <div class="leading-none">
             <span class="text-[11px] uppercase tracking-widest text-white/40 font-black block mb-1 text-center md:text-left">Telephone</span>
-            <a href={`tel:${contactInfo.phone.replace(/-/g, '')}`} class="inline-block text-white font-bold hover:text-[#E76E32] transition-colors duration-300 text-[18px]">
+            <a href={`tel:${contactInfo.phone.replace(/-/g, '')}`} class="inline-block text-white font-bold hover:text-[#ffdcb8] transition-colors duration-300 text-[18px]">
               {contactInfo.phone}
             </a>
           </div>

@@ -38,7 +38,7 @@ import bgImg from '../assets/Hero/heroImg.jpeg';
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
                             </svg>
                         </span>
-                        Free Booth Design in 48 Hours
+                        Free Booth Design in 72 Hours
                     </li>
                     <li class="flex items-center gap-3 text-white font-semibold text-[14px] md:text-[16px]">
                         <span class="flex items-center justify-center w-6 h-6 rounded-full bg-[#F97316] shrink-0">
@@ -54,14 +54,15 @@ import bgImg from '../assets/Hero/heroImg.jpeg';
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
                             </svg>
                         </span>
-                        Standout Booths
+                        Captivating Booths
                     </li>
                 </ul>
 
                 <div class="flex justify-center lg:justify-start mt-7">
                     <a
-                        href="https://radiantexhibits.com/contact-us"
-                        class="inline-flex items-center justify-center bg-[#F97316] hover:bg-[#ea6c10] text-white text-[20px] font-extrabold px-10 py-3 rounded-2xl transition-all duration-300"
+                        href="#footer-cta-form"
+                        id="contact-us-btn"
+                        class="inline-flex items-center justify-center bg-[#F97316] hover:bg-[#ea6c10] text-white text-[20px] font-extrabold px-22 py-3.5 rounded-2xl transition-all duration-300 cursor-pointer"
                     >
                         Contact Us
                     </a>
@@ -93,6 +94,7 @@ import bgImg from '../assets/Hero/heroImg.jpeg';
                             </label>
 
                             <input
+                                id="cta-name-input"
                                 type="text"
                                 placeholder="John Doe"
                                 class="w-full h-[40px] md:h-[46px] rounded-xl bg-[#01324d] border border-white/10 px-4 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-white/30"
@@ -171,6 +173,17 @@ import bgImg from '../assets/Hero/heroImg.jpeg';
 </section>
 
 <script is:inline>
+document.getElementById('contact-us-btn')?.addEventListener('click', function(e) {
+    e.preventDefault();
+    const nameInput = document.getElementById('cta-name-input');
+    if (nameInput) {
+        nameInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setTimeout(() => {
+            nameInput.focus();
+        }, 400);
+    }
+});
+
 document.getElementById('footer-cta-form').addEventListener('submit', function(e) {
     e.preventDefault();
     window.location.href = '/thankyou';

@@ -1,45 +1,45 @@
 ---
 import { Image } from 'astro:assets';
 
-import logo1 from '../assets/CompanyLogos/3m.png';
-import logo2 from '../assets/CompanyLogos/bausch+lomb.png';
-import logo3 from '../assets/CompanyLogos/bayer.png';
-import logo4 from '../assets/CompanyLogos/calidon.png';
-import logo5 from '../assets/CompanyLogos/cathelle.png';
-import logo6 from '../assets/CompanyLogos/coast-music.png';
-import logo7 from '../assets/CompanyLogos/coldwell-banker.png';
-import logo8 from '../assets/CompanyLogos/dakine.png';
-import logo9 from '../assets/CompanyLogos/fresenius-kabi.png';
-import logo10 from '../assets/CompanyLogos/rbc.png';
-import logo11 from '../assets/CompanyLogos/shoppers-drug-mart.png';
+/*
+  Automatically import every image inside:
+  src/assets/CompanyLogos/
 
-const logos = [
-  { src: logo1, alt: 'Client Logo 1' },
-  { src: logo2, alt: 'Client Logo 2' },
-  { src: logo3, alt: 'Client Logo 3' },
-  { src: logo4, alt: 'Client Logo 4' },
-  { src: logo5, alt: 'Client Logo 5' },
-  { src: logo6, alt: 'Client Logo 6' },
-  { src: logo7, alt: 'Client Logo 7' },
-  { src: logo8, alt: 'Client Logo 8' },
-  { src: logo9, alt: 'Client Logo 9' },
-  { src: logo10, alt: 'Client Logo 10' },
-  { src: logo11, alt: 'Client Logo 11' },
-];
+  Supported formats below:
+  png, jpg, jpeg, webp, svg, avif
+  (add/remove formats if you want)
+*/
+const logoModules = import.meta.glob(
+  '/src/assets/CompanyLogos/*.{png,jpg,jpeg,webp,svg,avif,PNG,JPG,JPEG,WEBP,SVG,AVIF}',
+  { eager: true }
+);
+
+const logos = Object.entries(logoModules)
+  .sort(([a], [b]) => a.localeCompare(b))
+  .map(([path, mod]) => {
+    const fileName = path.split('/').pop()?.replace(/\.[^/.]+$/, '') || 'Client Logo';
+
+    return {
+      src: (mod as any).default,
+      alt: fileName.replace(/[-_]+/g, ' ')
+    };
+  });
 ---
 
 <section id="clients" class="py-8 bg-white overflow-hidden select-none">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6 text-center">
-    <h2 class="flex items-center justify-center uppercase text-[26px] md:text-[32px] font-black !text-black">
-        Our Clients
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-2 text-center">
+    <h2 class="flex items-center justify-center uppercase tracking-[0.2em] text-[26px] md:text-[32px] font-black !text-black">
+      Our Clients
     </h2>
   </div>
 
   <div class="w-full overflow-hidden ticker-wrapper cursor-grab active:cursor-grabbing">
     <div class="flex gap-8 ticker-track items-center py-4">
-      
-      {[...logos, ...logos].map((logo) => (
-        <div class="bg-white px-8 py-6 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-center min-w-[220px] h-28 flex-shrink-0 pointer-events-none">
+      {[...logos, ...logos].map((logo, index) => (
+        <div
+          class="bg-white px-8 py-6 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-center min-w-[220px] h-28 flex-shrink-0 pointer-events-none"
+          key={`logo-${index}`}
+        >
           <Image
             src={logo.src}
             alt={logo.alt}
@@ -48,82 +48,108 @@ const logos = [
           />
         </div>
       ))}
-      
     </div>
   </div>
 </section>
 
 <script is:inline>
-  const wrapper = document.querySelector('.ticker-wrapper');
-  const track = document.querySelector('.ticker-track');
-  
-  if (wrapper && track) {
+  (() => {
+    const wrapper = document.querySelector('.ticker-wrapper');
+    const track = document.querySelector('.ticker-track');
+
+    if (!wrapper || !track) return;
+
     let currentX = 0;
-    const speed = 1; // Pixels per frame auto-scroll speed
+    const speed = 1; // auto scroll speed
     let isDragging = false;
     let startX = 0;
-    let dragX = 0;
+    let startY = 0;
+    let dragStartX = 0;
+    let mode = null;
 
     function updateTicker() {
-      // 1. If not dragging, apply the regular auto-scroll
       if (!isDragging) {
         currentX -= speed;
       }
 
-      // Calculate the point where the first set ends to snap back seamlessly
-      // We divide by 2 because the track contains two full copies of the array
       const halfWidth = track.scrollWidth / 2;
 
-      // Bound checks for infinite seamless looping
       if (Math.abs(currentX) >= halfWidth) {
         currentX += halfWidth;
       } else if (currentX > 0) {
         currentX -= halfWidth;
       }
 
-      // Move via CSS transform instead of scroll properties to prevent scrollbars completely
       track.style.transform = `translate3d(${currentX}px, 0, 0)`;
       requestAnimationFrame(updateTicker);
     }
 
-    // Start loop
     requestAnimationFrame(updateTicker);
 
-    // 2. Manual Mouse & Touch Events for Dragging
+    const getPageX = (e) => {
+      if (e.touches && e.touches[0]) return e.touches[0].pageX;
+      return e.pageX;
+    };
+
+    const getPageY = (e) => {
+      if (e.touches && e.touches[0]) return e.touches[0].pageY;
+      return e.pageY;
+    };
+
     const startDrag = (e) => {
       isDragging = true;
-      startX = (e.pageX || e.touches[0].pageX) - currentX;
+      mode = null;
+      startX = getPageX(e);
+      startY = getPageY(e);
+      dragStartX = startX - currentX;
     };
 
     const moveDrag = (e) => {
       if (!isDragging) return;
-      e.preventDefault();
-      const x = e.pageX || e.touches[0].pageX;
-      currentX = x - startX;
+
+      const x = getPageX(e);
+      const y = getPageY(e);
+      const dx = x - startX;
+      const dy = y - startY;
+
+      if (!mode) {
+        if (Math.abs(dx) < 5 && Math.abs(dy) < 5) return;
+        mode = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
+      }
+
+      if (mode === 'x') {
+        if (e.cancelable) {
+          e.preventDefault();
+        }
+        currentX = x - dragStartX;
+      } else if (mode === 'y') {
+        isDragging = false;
+      }
     };
 
     const stopDrag = () => {
       isDragging = false;
+      mode = null;
     };
 
-    // Mouse Listeners
+    // Mouse
     wrapper.addEventListener('mousedown', startDrag);
     window.addEventListener('mousemove', moveDrag);
     window.addEventListener('mouseup', stopDrag);
     wrapper.addEventListener('mouseleave', stopDrag);
 
-    // Touch Listeners (Mobile compatibility)
-    wrapper.addEventListener('touchstart', startDrag);
+    // Touch
+    wrapper.addEventListener('touchstart', startDrag, { passive: true });
     window.addEventListener('touchmove', moveDrag, { passive: false });
     window.addEventListener('touchend', stopDrag);
-  }
+  })();
 </script>
 
 <style>
   .ticker-wrapper {
     position: relative;
     width: 100%;
-    touch-action: pan-y; /* Allows normal vertical page scrolling on mobile */
+    touch-action: pan-y; /* keeps vertical page scrolling working on mobile */
   }
 
   .ticker-track {
