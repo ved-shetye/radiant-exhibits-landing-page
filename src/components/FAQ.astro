@@ -5,25 +5,28 @@ import { ChevronDown } from 'lucide-astro';
 
 const faqs = [
     {
-        q: "What types of trade show booths does Radiant Exhibits offer?",
-        a: "We offer a full range of booth solutions including custom island exhibits, inline booths, modular displays, portable pop-up systems, and fabric tension displays. Every design is tailored to your brand, budget, and show requirements."
+        q: "Should I rent or buy my trade show exhibit?",
+        a: "The right choice depends on how frequently you exhibit, how stable your brand identity is, and your available budget. Renting is an excellent option if you are a first-time exhibitor and want to test what works before committing, if you exhibit at only one to three shows per year, if you have simultaneous shows requiring multiple booths, or if your brand messaging changes frequently. Purchasing makes more sense if you exhibit regularly at four or more shows per year, if your brand identity is stable and consistent, and if you want to build equity in a long-term asset. Radiant Exhibits offers both options, and our rental inventory can be fully customized with your own graphics and branding — so a rental booth can look and feel as distinctive as a purchased one. Many of our clients begin with a rental and transition to ownership once they have found the right configuration for their needs."
     },
     {
-        q: "Does Radiant Exhibits handle installation and dismantling?",
-        a: "Yes — we provide complete end-to-end service. Our team handles delivery, professional installation at the venue, and full dismantling after the show. You show up, focus on your business, and we handle the rest.",
+        q: "How much does a trade show booth cost?",
+        a: "Booth costs vary widely based on size, type, complexity, and whether you are renting or purchasing. As a general guide: portable displays and banner stands for a 10×10 space typically range from a few hundred to several thousand dollars. A 10×10 modular rental runs approximately $8,000–$20,000 all-in. Custom modular and hybrid exhibits for 10×20 or larger spaces range from $15,000 to $60,000 and beyond, depending on the design. Fully custom fabricated island exhibits can run into the hundreds of thousands of dollars. Radiant Exhibits offers competitive pricing across all categories and provides free, detailed quotes tailored to your specific requirements. We encourage you to use our Booth Selector tool on our website or contact us directly — our team will help you find the highest-impact solution within your budget."
     },
     {
-        q: "How does the design process work?",
-        a: "We start with a discovery call to understand your goals, brand, and booth space. From there our team moves through concept development, 3D rendering for your approval, and then full production and finishing.",
-        isSteps: true
+        q: "What is a customized exhibit solution and who is it for?",
+        a: "A customized exhibit solution is a booth designed and built specifically for your brand, with no off-the-shelf components limiting what is possible. It starts with a consultation with our design team, where we learn about your brand identity, your products or services, your target audience, and your goals for the show. From there, our designers develop a concept that is unique to you — incorporating custom structural elements, branded architectural features, integrated technology, dedicated meeting spaces, product display fixtures, and any other element that serves your strategy. Customized solutions are ideal for companies that exhibit at major industry conferences where brand presence is a competitive differentiator, for product launches that require theatrical impact, and for organizations that want a booth experience that is distinctly and unmistakably theirs. Custom exhibits are available both for purchase and as rental configurations."
     },
     {
-        q: "How far in advance should I book for a trade show?",
-        a: "We recommend reaching out at least 6–8 weeks before your show date for custom builds. For modular or portable systems we can often turn things around faster. Contact us early to lock in your timeline."
+        q: "What is the Radiant Exhibits system management service?",
+        a: "System management is Radiant Exhibits' white-glove logistics and asset management service for clients who exhibit regularly throughout the year. Under this program, we store your exhibit between shows, manage the inventory of all components and graphics, coordinate shipping to and from each venue on your show schedule, arrange installation and dismantling at each event, conduct post-show inspections for damage or wear, and manage graphic reprints or component replacements as needed. System management removes the burden of exhibit ownership from your internal team entirely — your exhibit is ready, on time, in perfect condition, at every show, without you having to manage a single logistics detail. This service is particularly valuable for companies with annual show schedules of three or more events."
     },
     {
-        q: "Do you serve trade shows across all of Canada?",
-        a: "Yes. Radiant Exhibits services trade shows and events across Canada, including Toronto, Vancouver, Calgary, Montreal, and beyond. We coordinate logistics and installation wherever your show takes place."
+        q: "How do I choose the right booth size for my needs?",
+        a: "Booth size selection depends on four factors: your budget, your show objectives, the number of products or people you need to accommodate, and the competitive environment at the shows you attend. A 10×10 space (100 square feet) is standard for first-time or budget-conscious exhibitors and works well for a focused brand message with one to two staff members. A 10×20 inline gives you room for a more developed visual environment, dedicated product display areas, and comfortable traffic flow for three to four staff. A 20×20 or larger island exhibit (open on multiple sides) dramatically increases visibility from across the hall, accommodates meeting spaces, product demo areas, and multiple concurrent conversations, and signals a premium brand presence. Radiant Exhibits offers a free Booth Selector tool on our website to guide you through the decision, or you can speak with our team directly for a personalized recommendation."
+    },
+    {
+        q: "How can I maximize my return on investment at a trade show?",
+        a: "A well-designed exhibit is only one component of trade show ROI. The most successful exhibitors combine strong visual presence with strategic pre-show outreach, trained booth staff, a clear visitor engagement script, a disciplined lead capture process, and a fast post-show follow-up plan. Specifically: set measurable goals before the show (number of qualified leads, meetings booked, demos conducted); promote your booth location to existing clients and prospects in advance via email and social media; ensure every staff member understands their role and knows how to qualify visitors efficiently; use a lead capture tool that records intent and context, not just contact information; and follow up with every qualified lead within 48 hours of the show closing. Radiant Exhibits can help you optimize your visual presence and booth layout to support these objectives — for example, designing traffic flow that naturally draws visitors in, creating dedicated demo or meeting areas, and using technology and lighting to increase dwell time."
     }
 ];
 ---
@@ -60,7 +63,7 @@ const faqs = [
                 {faqs.map((faq) => (
                     <div class="faq-item group bg-white rounded-2xl border border-slate-100 transition-all duration-300 shadow-[0_4px_12px_rgba(15,23,42,0.015)]">
                         <button class="faq-btn w-full text-left px-6 py-5 bg-transparent rounded-2xl flex justify-between items-center gap-4 cursor-pointer transition-all duration-300">
-                            <span class="faq-question text-[15px] md:text-[18px] font-extrabold text-slate-800 leading-snug transition-colors duration-300">
+                            <span class="faq-question text-[15px] md:text-[17px] font-extrabold text-slate-800 leading-snug transition-colors duration-300">
                                 {faq.q}
                             </span>
                             <div class="faq-icon-container bg-slate-50 p-2 rounded-full border border-slate-100 text-secondary transition-all duration-300 shrink-0 flex items-center justify-center w-8 h-8">
@@ -70,7 +73,7 @@ const faqs = [
 
                         <div class="faq-body overflow-hidden transition-all duration-300" style="max-height:0">
                             <div class="px-6 pb-6 pt-1 text-slate-600 text-[16px] leading-relaxed rounded-b-2xl">
-                                <p class="mb-4 font-medium text-slate-600 border-t border-slate-50 pt-4 leading-relaxed">
+                                <p class="mb-4 font-medium text-[15px] text-slate-600 border-t border-slate-50 pt-4 leading-relaxed">
                                     {faq.a}
                                 </p>
 
